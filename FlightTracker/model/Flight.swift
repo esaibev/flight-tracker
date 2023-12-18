@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Flight: Codable {
+struct Flight: Codable, Equatable {
     let aircraftIcao: String?
     let airlineIata: String?
     let airlineIcao: String?
