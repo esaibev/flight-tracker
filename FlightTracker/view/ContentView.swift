@@ -8,12 +8,21 @@
 import SwiftUI
 
 struct ContentView: View {
+    @Environment(FlightTrackerVM.self) var ftvm
+
     var body: some View {
         VStack {
             Image(systemName: "globe")
                 .imageScale(.large)
                 .foregroundStyle(.tint)
-            Text("Hello, world!")
+            Button {
+                Task {
+                    await ftvm.getFlight("EI127")
+                }
+            } label: {
+                Text("Get Flight")
+            }
+            .padding()
         }
         .padding()
     }
@@ -21,4 +30,5 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
+        .environment(FlightTrackerVM())
 }

@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct FlightTrackerApp: App {
+    @State private var ftvm = FlightTrackerVM()
+
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environment(ftvm)
         }
     }
 }
