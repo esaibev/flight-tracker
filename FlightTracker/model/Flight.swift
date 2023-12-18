@@ -26,9 +26,9 @@ struct Flight: Codable, Equatable {
     let lat: Double?
     let lon: Double?
     let alt: Int?
-    let dir: Int?
+    let dir: Double?
     let speed: Int?
-    let vSpeed: Int?
+    let vSpeed: Double?
     let updated: Int?
     let built: Int?
     let eta: Int?

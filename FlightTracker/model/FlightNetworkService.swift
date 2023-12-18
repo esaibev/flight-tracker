@@ -10,10 +10,10 @@ import Foundation
 struct FlightNetworkService {
     static func getFlight(_ flightIata: String) async throws -> Flight {
         // Get data from JSON to save API calls
-        return try getFlightFromJSON()
+//        return try getFlightFromJSON()
 
         // Standard way of getting data
-//        return try await getFlightFromURL(flightIata)
+        return try await getFlightFromURL(flightIata)
     }
 
     private static func getFlightFromURL(_ flightIata: String) async throws -> Flight {
@@ -24,9 +24,9 @@ struct FlightNetworkService {
         let (data, _) = try await URLSession.shared.data(from: url)
 
         // Debugging: Print raw JSON data
-//        if let jsonString = String(data: data, encoding: .utf8) {
-//            print("JSON String: \(jsonString)\n")
-//        }
+        if let jsonString = String(data: data, encoding: .utf8) {
+            print("JSON String: \(jsonString)\n")
+        }
 
         let decoder = JSONDecoder()
         let response = try decoder.decode(FlightResponse.self, from: data)

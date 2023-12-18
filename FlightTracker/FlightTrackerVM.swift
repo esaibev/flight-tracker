@@ -10,9 +10,7 @@ import MapKit
 import Observation
 import SwiftUI
 
-extension CLLocationCoordinate2D {
-    static let coordinates = CLLocationCoordinate2D(latitude: 58.072287, longitude: 15.299835)
-}
+let defaultLocation = CLLocationCoordinate2D(latitude: 59.3293, longitude: 18.0686)
 
 @Observable
 class FlightTrackerVM {
@@ -35,10 +33,10 @@ class FlightTrackerVM {
         }
     }
 
-    static func defaultCamera() -> MapCamera {
-        MapCamera(centerCoordinate: .coordinates,
-                  distance: 400000,
-                  heading: 0,
-                  pitch: 0)
+    func getCoordinates() -> CLLocationCoordinate2D {
+        if flight?.lat != nil && flight?.lon != nil {
+            return CLLocationCoordinate2D(latitude: (flight?.lat)!, longitude: (flight?.lon)!)
+        }
+        return defaultLocation
     }
 }
