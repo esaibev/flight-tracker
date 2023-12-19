@@ -10,10 +10,10 @@ import SwiftUI
 
 struct ContentView: View {
     @Environment(FlightTrackerVM.self) var ftvm
-    @State private var pos: MapCameraPosition = .region(.userRegion)
 
     var body: some View {
-        Map(position: $pos, interactionModes: [.zoom, .pan]) {
+        @Bindable var ftvm = ftvm
+        Map(position: $ftvm.pos, interactionModes: [.zoom, .pan]) {
             if ftvm.flight != nil {
                 Annotation("Flight", coordinate: ftvm.getCoordinates()) {
                     Image(systemName: "airplane")
@@ -29,7 +29,7 @@ struct ContentView: View {
             HStack {
                 Button {
                     Task {
-                        await ftvm.getFlight("LH828")
+                        await ftvm.getFlight("D83513")
                     }
                 } label: {
                     Text("Get Flight")
@@ -39,26 +39,6 @@ struct ContentView: View {
             .frame(maxWidth: /*@START_MENU_TOKEN@*/ .infinity/*@END_MENU_TOKEN@*/)
             .background(.thinMaterial)
         }
-        .onChange(of: ftvm.flight) {
-            if let lat = ftvm.flight?.lat, let lon = ftvm.flight?.lon {
-                let newCenterCoordinate = CLLocationCoordinate2D(latitude: lat, longitude: lon)
-                pos = .region(MKCoordinateRegion(center: newCenterCoordinate, latitudinalMeters: 300000, longitudinalMeters: 300000))
-            }
-        }
-    }
-}
-
-extension CLLocationCoordinate2D {
-    static var userLocation: CLLocationCoordinate2D {
-        return .init(latitude: 59.3293, longitude: 18.0686)
-    }
-}
-
-extension MKCoordinateRegion {
-    static var userRegion: MKCoordinateRegion {
-        return .init(center: .userLocation,
-                     latitudinalMeters: 300000,
-                     longitudinalMeters: 300000)
     }
 }
 

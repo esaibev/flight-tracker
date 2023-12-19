@@ -16,12 +16,18 @@ let defaultLocation = CLLocationCoordinate2D(latitude: 59.3293, longitude: 18.06
 class FlightTrackerVM {
     var flight: Flight?
     var errorMessage: String?
+    var pos: MapCameraPosition = .region(.startingRegion)
 
     func getFlight(_ flightIata: String) async {
         do {
             let flight = try await FlightNetworkService.getFlight(flightIata)
+
             DispatchQueue.main.async {
                 self.flight = flight
+                if let lat = flight.lat, let lon = flight.lon {
+                    let centerCoordinate = CLLocationCoordinate2D(latitude: lat, longitude: lon)
+                    self.pos = MapCameraPosition.region(MKCoordinateRegion(center: centerCoordinate, latitudinalMeters: 400000, longitudinalMeters: 400000))
+                }
                 print(flight)
             }
         } catch {
@@ -43,5 +49,19 @@ class FlightTrackerVM {
     func getAngle() -> Angle {
         guard let dir = flight?.dir else { return Angle(degrees: 0) }
         return Angle(degrees: dir - 90)
+    }
+}
+
+extension CLLocationCoordinate2D {
+    static var startingLocation: CLLocationCoordinate2D {
+        return .init(latitude: 59.3293, longitude: 18.0686)
+    }
+}
+
+extension MKCoordinateRegion {
+    static var startingRegion: MKCoordinateRegion {
+        return .init(center: .startingLocation,
+                     latitudinalMeters: 400000,
+                     longitudinalMeters: 400000)
     }
 }
