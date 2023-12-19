@@ -13,6 +13,7 @@ struct ContentView: View {
 
     var body: some View {
         @Bindable var ftvm = ftvm
+
         Map(position: $ftvm.pos, interactionModes: [.zoom, .pan]) {
             if ftvm.flight != nil {
                 Annotation("Flight", coordinate: ftvm.getCoordinates()) {
@@ -27,15 +28,9 @@ struct ContentView: View {
         }
         .safeAreaInset(edge: .bottom) {
             HStack {
-                Button {
-                    Task {
-                        await ftvm.getFlight("D83513")
-                    }
-                } label: {
-                    Text("Get Flight")
-                }
+                InputView()
             }
-            .padding(.top)
+            .padding([.top, .horizontal])
             .frame(maxWidth: /*@START_MENU_TOKEN@*/ .infinity/*@END_MENU_TOKEN@*/)
             .background(.thinMaterial)
         }

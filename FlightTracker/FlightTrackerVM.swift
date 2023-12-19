@@ -26,7 +26,9 @@ class FlightTrackerVM {
                 self.flight = flight
                 if let lat = flight.lat, let lon = flight.lon {
                     let centerCoordinate = CLLocationCoordinate2D(latitude: lat, longitude: lon)
-                    self.pos = MapCameraPosition.region(MKCoordinateRegion(center: centerCoordinate, latitudinalMeters: 400000, longitudinalMeters: 400000))
+                    withAnimation(.spring()) {
+                        self.pos = MapCameraPosition.region(MKCoordinateRegion(center: centerCoordinate, latitudinalMeters: 400000, longitudinalMeters: 400000))
+                    }
                 }
                 print(flight)
             }
