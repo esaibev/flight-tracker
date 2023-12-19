@@ -13,7 +13,7 @@ struct ContentView: View {
     @State private var pos: MapCameraPosition = .region(.userRegion)
 
     var body: some View {
-        Map(position: $pos) {
+        Map(position: $pos, interactionModes: [.zoom, .pan]) {
             if ftvm.flight != nil {
                 Annotation("Flight", coordinate: ftvm.getCoordinates()) {
                     Image(systemName: "airplane")
@@ -29,7 +29,7 @@ struct ContentView: View {
             HStack {
                 Button {
                     Task {
-                        await ftvm.getFlight("5X214")
+                        await ftvm.getFlight("UA900")
                     }
                 } label: {
                     Text("Get Flight")
