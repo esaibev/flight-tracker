@@ -39,4 +39,9 @@ class FlightTrackerVM {
         }
         return defaultLocation
     }
+
+    func getAngle() -> Angle {
+        guard let dir = flight?.dir else { return Angle(degrees: 0) }
+        return Angle(degrees: dir - 90)
+    }
 }

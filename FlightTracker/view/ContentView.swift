@@ -19,7 +19,7 @@ struct ContentView: View {
                     Image(systemName: "airplane")
                         .font(.system(size: 24))
                         .foregroundStyle(.yellow)
-                        .rotationEffect(Angle(degrees: 174))
+                        .rotationEffect(ftvm.getAngle())
                         .shadow(color: Color(red: 0.0, green: 0.001, blue: 0.001, opacity: 0.5), radius: 1, x: 1, y: 2)
                 }
                 .annotationTitles(.hidden)
@@ -29,7 +29,7 @@ struct ContentView: View {
             HStack {
                 Button {
                     Task {
-                        await ftvm.getFlight("UA900")
+                        await ftvm.getFlight("LH828")
                     }
                 } label: {
                     Text("Get Flight")
@@ -42,7 +42,7 @@ struct ContentView: View {
         .onChange(of: ftvm.flight) {
             if let lat = ftvm.flight?.lat, let lon = ftvm.flight?.lon {
                 let newCenterCoordinate = CLLocationCoordinate2D(latitude: lat, longitude: lon)
-                pos = .camera(MapCamera(centerCoordinate: newCenterCoordinate, distance: 500000, heading: 0, pitch: 0))
+                pos = .region(MKCoordinateRegion(center: newCenterCoordinate, latitudinalMeters: 300000, longitudinalMeters: 300000))
             }
         }
     }
@@ -57,8 +57,8 @@ extension CLLocationCoordinate2D {
 extension MKCoordinateRegion {
     static var userRegion: MKCoordinateRegion {
         return .init(center: .userLocation,
-                     latitudinalMeters: 100000,
-                     longitudinalMeters: 100000)
+                     latitudinalMeters: 300000,
+                     longitudinalMeters: 300000)
     }
 }
 
