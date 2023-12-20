@@ -10,30 +10,46 @@ import SwiftUI
 
 struct ContentView: View {
     @Environment(FlightTrackerVM.self) var ftvm
+    @State private var isFlightInfoSelected: Bool = false
 
     var body: some View {
         @Bindable var ftvm = ftvm
 
-        Map(position: $ftvm.pos, interactionModes: [.zoom, .pan]) {
+        Map(position: $ftvm.camera, interactionModes: [.zoom, .pan]) {
             if ftvm.flight != nil {
                 Annotation("Flight " + (ftvm.flight?.flightIata ?? ""), coordinate: ftvm.getCoordinates()) {
                     Image(systemName: "airplane")
                         .font(.system(size: 24))
-                        .foregroundStyle(.yellow)
+                        .foregroundStyle(.main)
                         .rotationEffect(ftvm.getAngle())
                         .shadow(color: Color(red: 0.0, green: 0.001, blue: 0.001, opacity: 0.5), radius: 1, x: 1, y: 2)
+                        .onTapGesture {
+                            isFlightInfoSelected = true
+                            ftvm.isFlightInfoVisible = true
+                        }
                 }
-//                .annotationTitles(.hidden)
             }
         }
         .safeAreaInset(edge: .bottom) {
-            HStack {
+            if ftvm.isFlightInfoVisible {
+                FlightInfoView(flight: ftvm.flight)
+            } else {
                 InputView()
             }
-            .padding([.top, .horizontal])
-            .frame(maxWidth: /*@START_MENU_TOKEN@*/ .infinity/*@END_MENU_TOKEN@*/)
-            .background(.thinMaterial)
         }
+        .onTapGesture {
+            isFlightInfoSelected = false
+            ftvm.isFlightInfoVisible = false
+        }
+
+//        .safeAreaInset(edge: .bottom) {
+//            HStack {
+//                InputView()
+//            }
+//            .padding([.top, .horizontal])
+//            .frame(maxWidth: /*@START_MENU_TOKEN@*/ .infinity/*@END_MENU_TOKEN@*/)
+//            .background(.thinMaterial)
+//        }
     }
 }
 

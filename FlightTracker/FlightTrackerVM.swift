@@ -16,7 +16,8 @@ let defaultLocation = CLLocationCoordinate2D(latitude: 59.3293, longitude: 18.06
 class FlightTrackerVM {
     var flight: Flight?
     var errorMessage: String?
-    var pos: MapCameraPosition = .region(.startingRegion)
+    var camera: MapCameraPosition = .region(.startingRegion)
+    var isFlightInfoVisible: Bool = false
 
     func getFlight(_ flightIata: String) async {
         do {
@@ -27,7 +28,7 @@ class FlightTrackerVM {
                 if let lat = flight.lat, let lon = flight.lon {
                     let centerCoordinate = CLLocationCoordinate2D(latitude: lat, longitude: lon)
                     withAnimation(.spring()) {
-                        self.pos = MapCameraPosition.region(MKCoordinateRegion(center: centerCoordinate, latitudinalMeters: 400000, longitudinalMeters: 400000))
+                        self.camera = MapCameraPosition.region(MKCoordinateRegion(center: centerCoordinate, latitudinalMeters: 400000, longitudinalMeters: 400000))
                     }
                 }
                 print(flight)

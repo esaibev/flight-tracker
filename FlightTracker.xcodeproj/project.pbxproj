@@ -12,6 +12,7 @@
 		6636717E2B2F826900FC6234 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6636717D2B2F826900FC6234 /* Assets.xcassets */; };
 		663671812B2F826900FC6234 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 663671802B2F826900FC6234 /* Preview Assets.xcassets */; };
 		6636718A2B2F84FE00FC6234 /* FlightTrackerVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 663671892B2F84FE00FC6234 /* FlightTrackerVM.swift */; };
+		66389C132B335EEA00B56CB1 /* FlightInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66389C122B335EEA00B56CB1 /* FlightInfoView.swift */; };
 		66391EA12B3240CF00EDABB0 /* InputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66391EA02B3240CF00EDABB0 /* InputView.swift */; };
 		66A227A12B30646600C46E65 /* Flight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66A227A02B30646600C46E65 /* Flight.swift */; };
 		66A227A32B30658D00C46E65 /* FlightNetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66A227A22B30658D00C46E65 /* FlightNetworkService.swift */; };
@@ -25,6 +26,7 @@
 		6636717D2B2F826900FC6234 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		663671802B2F826900FC6234 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		663671892B2F84FE00FC6234 /* FlightTrackerVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlightTrackerVM.swift; sourceTree = "<group>"; };
+		66389C122B335EEA00B56CB1 /* FlightInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlightInfoView.swift; sourceTree = "<group>"; };
 		66391EA02B3240CF00EDABB0 /* InputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputView.swift; sourceTree = "<group>"; };
 		66A227A02B30646600C46E65 /* Flight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Flight.swift; sourceTree = "<group>"; };
 		66A227A22B30658D00C46E65 /* FlightNetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlightNetworkService.swift; sourceTree = "<group>"; };
@@ -94,6 +96,7 @@
 			children = (
 				6636717B2B2F826600FC6234 /* ContentView.swift */,
 				66391EA02B3240CF00EDABB0 /* InputView.swift */,
+				66389C122B335EEA00B56CB1 /* FlightInfoView.swift */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -179,6 +182,7 @@
 			files = (
 				66A227A32B30658D00C46E65 /* FlightNetworkService.swift in Sources */,
 				6636717C2B2F826600FC6234 /* ContentView.swift in Sources */,
+				66389C132B335EEA00B56CB1 /* FlightInfoView.swift in Sources */,
 				6636718A2B2F84FE00FC6234 /* FlightTrackerVM.swift in Sources */,
 				6636717A2B2F826600FC6234 /* FlightTrackerApp.swift in Sources */,
 				66A227A12B30646600C46E65 /* Flight.swift in Sources */,

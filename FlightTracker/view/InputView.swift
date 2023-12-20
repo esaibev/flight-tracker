@@ -67,6 +67,9 @@ struct InputView: View {
                 }
             }
         }
+        .padding([.top, .horizontal])
+        .frame(maxWidth: /*@START_MENU_TOKEN@*/ .infinity/*@END_MENU_TOKEN@*/)
+        .background(.thinMaterial)
     }
 }
 
