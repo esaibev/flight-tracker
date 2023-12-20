@@ -11,6 +11,7 @@ struct InputView: View {
     @Environment(FlightTrackerVM.self) var ftvm
     @State var searchText = ""
     @State private var isIconVisible = true
+    @State var showCancelButton = false
     @FocusState private var isInputActive: Bool
 
     var body: some View {
@@ -18,6 +19,7 @@ struct InputView: View {
             HStack {
                 Image(systemName: "magnifyingglass")
                     .foregroundColor(Color(.gray))
+
                 TextField("Search by flight number", text: $searchText)
                     .focused($isInputActive)
                     .disableAutocorrection(true)
@@ -33,16 +35,13 @@ struct InputView: View {
                             },
                         alignment: .trailing
                     )
-                    .toolbar {
-                        ToolbarItemGroup(placement: .keyboard) {
-                            Spacer()
-                            Button("Close") {
-                                isInputActive = false
-                            }
-                        }
+                    .onTapGesture {
+                        isInputActive = true
+                        showCancelButton = true
                     }
                     .onSubmit {
                         isInputActive = false
+                        showCancelButton = false
                         Task {
                             await ftvm.getFlight(searchText)
                         }
@@ -60,6 +59,13 @@ struct InputView: View {
                         radius: 7, x: 0, y: 4
                     )
             )
+
+            if showCancelButton {
+                Button("Cancel") {
+                    isInputActive = false
+                    showCancelButton = false
+                }
+            }
         }
     }
 }

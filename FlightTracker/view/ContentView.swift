@@ -16,14 +16,14 @@ struct ContentView: View {
 
         Map(position: $ftvm.pos, interactionModes: [.zoom, .pan]) {
             if ftvm.flight != nil {
-                Annotation("Flight", coordinate: ftvm.getCoordinates()) {
+                Annotation("Flight " + (ftvm.flight?.flightIata ?? ""), coordinate: ftvm.getCoordinates()) {
                     Image(systemName: "airplane")
                         .font(.system(size: 24))
                         .foregroundStyle(.yellow)
                         .rotationEffect(ftvm.getAngle())
                         .shadow(color: Color(red: 0.0, green: 0.001, blue: 0.001, opacity: 0.5), radius: 1, x: 1, y: 2)
                 }
-                .annotationTitles(.hidden)
+//                .annotationTitles(.hidden)
             }
         }
         .safeAreaInset(edge: .bottom) {
