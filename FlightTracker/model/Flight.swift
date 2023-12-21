@@ -30,6 +30,7 @@ struct Flight: Codable, Equatable {
     let speed: Int?
     let vSpeed: Double?
     let built: Int?
+    let percent: Double?
     let eta: Int?
 
     enum CodingKeys: String, CodingKey {
@@ -55,6 +56,7 @@ struct Flight: Codable, Equatable {
         case speed
         case vSpeed = "v_speed"
         case built
+        case percent
         case eta
     }
 }

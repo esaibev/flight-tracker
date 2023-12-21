@@ -24,6 +24,7 @@ struct InputView: View {
                     .focused($isInputActive)
                     .disableAutocorrection(true)
                     .foregroundColor(Color(.darkGray))
+                    .textInputAutocapitalization(.characters)
                     .overlay(
                         Image(systemName: "xmark.circle.fill")
                             .padding()
