@@ -10,9 +10,9 @@ import SwiftUI
 
 struct ContentView: View {
     @Environment(FlightTrackerVM.self) var ftvm
-    @State private var isFlightInfoSelected: Bool = false
     @State private var annotationSelected = false
     @State private var activeAnnotationTimer = false
+    @State private var selectedFlight: Flight?
 
     var body: some View {
         @Bindable var ftvm = ftvm
@@ -26,11 +26,13 @@ struct ContentView: View {
                         .foregroundStyle(.main)
                         .rotationEffect(ftvm.getAngle())
                         .shadow(color: Color(red: 0.0, green: 0.001, blue: 0.001, opacity: 0.5), radius: 1, x: 1, y: 2)
+                        .scaleEffect(ftvm.flight == selectedFlight ? 1.3 : 1)
+                        .animation(.spring(response: 0.3, dampingFraction: 0.5, blendDuration: 0.15), value: ftvm.flight == selectedFlight)
                         .onTapGesture {
-//                            print("Annotation clicked")
                             annotationSelected = true
                             activeAnnotationTimer = true
                             ftvm.isFlightInfoVisible = true
+                            selectedFlight = ftvm.flight
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                                 activeAnnotationTimer = false
                             }
@@ -49,26 +51,12 @@ struct ContentView: View {
         .onTapGesture {
             if !activeAnnotationTimer {
                 if annotationSelected {
-//                    print("Map: Tap 1 registered")
                     annotationSelected = false
-                    isFlightInfoSelected = false
+                    selectedFlight = nil
                     ftvm.isFlightInfoVisible = false
-                } else {
-//                    print("Map: Tap 2 registered")
                 }
-            } else {
-//                print("Map: Tap 3 registered")
             }
         }
-
-//        .safeAreaInset(edge: .bottom) {
-//            HStack {
-//                InputView()
-//            }
-//            .padding([.top, .horizontal])
-//            .frame(maxWidth: /*@START_MENU_TOKEN@*/ .infinity/*@END_MENU_TOKEN@*/)
-//            .background(.thinMaterial)
-//        }
     }
 }
 

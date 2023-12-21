@@ -101,9 +101,14 @@ struct FlightInfoView: View {
                     }
                     // Timeline section
                     VStack(spacing: 4) {
-                        if let percent = flight?.percent {
-                            ProgressView(value: percent / 100.0)
-                                .progressViewStyle(FlightProgressView())
+                        if let percent = flight?.percent, percent > 0 {
+                            if percent > 100 {
+                                ProgressView(value: 100)
+                                    .progressViewStyle(FlightProgressView())
+                            } else {
+                                ProgressView(value: percent / 100.0)
+                                    .progressViewStyle(FlightProgressView())
+                            }
                         } else {
                             ProgressView(value: 0)
                                 .progressViewStyle(FlightProgressView())
