@@ -9,6 +9,7 @@ import SwiftUI
 
 struct FlightInfoView: View {
     var flight: Flight?
+    @Environment(\.colorScheme) var colorScheme
 
     var body: some View {
         VStack(spacing: 4) {
@@ -40,7 +41,7 @@ struct FlightInfoView: View {
                                 .clipShape(RoundedRectangle(cornerRadius: 2))
                         }
                     }
-                    Text("\(self.flight?.airlineName ?? "")")
+                    Text("\(self.flight?.airlineName ?? "Unknown Airline")")
                         .font(.system(size: 14))
                         .foregroundStyle(.white)
                 }
@@ -79,8 +80,10 @@ struct FlightInfoView: View {
                         VStack(spacing: 3) {
                             Text("\(self.flight?.depIata ?? "N/A")")
                                 .font(.system(size: 18))
+                                .foregroundStyle(.black)
                             Text("\(self.flight?.depCity?.uppercased() ?? "N/A")")
                                 .font(.system(size: 10))
+                                .foregroundStyle(.black)
                         }
 
                         Image(systemName: "airplane")
@@ -90,8 +93,10 @@ struct FlightInfoView: View {
                         VStack(spacing: 3) {
                             Text("\(self.flight?.arrIata ?? "N/A")")
                                 .font(.system(size: 18))
+                                .foregroundStyle(.black)
                             Text("\(self.flight?.arrCity?.uppercased() ?? "N/A")")
                                 .font(.system(size: 10))
+                                .foregroundStyle(.black)
                         }
                     }
                     // Timeline section
@@ -107,11 +112,16 @@ struct FlightInfoView: View {
                             if let eta = flight?.eta {
                                 let hours = eta / 60
                                 let minutes = eta % 60
-                                if hours == 0 {
+
+                                if eta == 0 {
+                                    Text("Arriving in: N/A")
+                                } else if hours == 0 {
                                     Text("Arriving in: \(minutes)m")
                                 } else {
                                     Text("Arriving in: \(hours)h \(minutes)m")
                                 }
+                            } else {
+                                Text("Arriving in: N/A")
                             }
                         }
                         .font(.system(size: 10))
@@ -121,7 +131,6 @@ struct FlightInfoView: View {
                 }
                 .frame(minHeight: 72)
                 .padding(10)
-//                .background(.white)
                 .background(Color(red: 0.9176470588235294, green: 0.9176470588235294, blue: 0.9176470588235294))
                 .clipShape(RoundedRectangle(cornerRadius: 4))
 
@@ -135,8 +144,10 @@ struct FlightInfoView: View {
                                     .foregroundStyle(.darkGrayText)
                                 if let alt = self.flight?.alt {
                                     Text("\(alt) km")
+                                        .foregroundStyle(.black)
                                 } else {
                                     Text("N/A")
+                                        .foregroundStyle(.black)
                                 }
                             }
                             .font(.system(size: 10))
@@ -147,8 +158,10 @@ struct FlightInfoView: View {
                                     .foregroundStyle(.darkGrayText)
                                 if let speed = self.flight?.speed {
                                     Text("\(speed) km/h")
+                                        .foregroundStyle(.black)
                                 } else {
                                     Text("N/A")
+                                        .foregroundStyle(.black)
                                 }
                             }
                             .font(.system(size: 10))
@@ -162,8 +175,10 @@ struct FlightInfoView: View {
                                     .foregroundStyle(.darkGrayText)
                                 if let built = self.flight?.built {
                                     Text(verbatim: "\(built)")
+                                        .foregroundStyle(.black)
                                 } else {
                                     Text("N/A")
+                                        .foregroundStyle(.black)
                                 }
                             }
                             .font(.system(size: 10))
@@ -175,8 +190,10 @@ struct FlightInfoView: View {
                                 if let vSpeed = self.flight?.vSpeed {
                                     if vSpeed == 0 {
                                         Text("\(vSpeed, specifier: "%.0f") km/h")
+                                            .foregroundStyle(.black)
                                     } else {
                                         Text("\(vSpeed, specifier: "%.1f") km/h")
+                                            .foregroundStyle(.black)
                                     }
                                 } else {
                                     Text("N/A")
@@ -188,16 +205,12 @@ struct FlightInfoView: View {
                 }
                 .frame(minHeight: 72)
                 .padding(10)
-//                .background(.white)
                 .background(Color(red: 0.9176470588235294, green: 0.9176470588235294, blue: 0.9176470588235294))
                 .clipShape(RoundedRectangle(cornerRadius: 4))
             }
             .padding(.horizontal, 4)
         }
-//        .frame(maxWidth: .infinity)
-//        .background(Color(white: 1.0, opacity: 0.7))
         .background(Color(red: 0.24705882352941178, green: 0.25882352941176473, blue: 0.2784313725490196, opacity: 0.75))
-//        .background(.thinMaterial)
     }
 }
 
@@ -213,4 +226,5 @@ extension String {
 
 #Preview {
     FlightInfoView(flight: Flight(aircraftIcao: "B788", airlineIata: "AA", airlineIcao: "AAL", airlineName: "American Airlines", flightIata: "AA719", flightIcao: "AAL719", depIata: "FCO", depCity: "Rome", arrIata: "PHL", arrCity: "Philadelphia", status: "en-route", duration: 585, arrDelayed: 32, icao24: "AC0196", regNr: "N873BB", lat: 43.34963, lon: 8.27349, alt: 10972, dir: 292, speed: 820, vSpeed: -0.3, built: 2020, percent: 15, eta: 499))
+        .preferredColorScheme(.light)
 }

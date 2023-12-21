@@ -10,6 +10,7 @@ import SwiftUI
 struct InputView: View {
     @Environment(FlightTrackerVM.self) var ftvm
     @State var searchText = ""
+    @Environment(\.colorScheme) var colorScheme
     @State private var isIconVisible = true
     @State var showCancelButton = false
     @FocusState private var isInputActive: Bool
@@ -20,9 +21,11 @@ struct InputView: View {
                 Image(systemName: "magnifyingglass")
                     .foregroundColor(Color(.gray))
 
-                TextField("Search by flight number", text: $searchText)
+                TextField("", text: $searchText, prompt:
+                    Text("Search by flight number").foregroundStyle(Color(white: 0.7)))
                     .focused($isInputActive)
                     .disableAutocorrection(true)
+                    .keyboardType(.asciiCapable)
                     .foregroundColor(Color(.darkGray))
                     .textInputAutocapitalization(.characters)
                     .overlay(
@@ -66,15 +69,17 @@ struct InputView: View {
                     isInputActive = false
                     showCancelButton = false
                 }
+                .foregroundStyle(colorScheme == .light ? .white : .blue)
             }
         }
-        .padding([.top, .horizontal])
+        .padding()
         .frame(maxWidth: /*@START_MENU_TOKEN@*/ .infinity/*@END_MENU_TOKEN@*/)
-        .background(.thinMaterial)
+        .background(Color(red: 0.24705882352941178, green: 0.25882352941176473, blue: 0.2784313725490196, opacity: 0.75))
     }
 }
 
 #Preview {
     InputView()
         .environment(FlightTrackerVM())
+        .preferredColorScheme(.light)
 }
