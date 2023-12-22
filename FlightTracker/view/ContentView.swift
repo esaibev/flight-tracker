@@ -10,9 +10,11 @@ import SwiftUI
 
 struct ContentView: View {
     @Environment(FlightTrackerVM.self) var ftvm
+    @Environment(\.scenePhase) var scenePhase
     @State private var annotationSelected = false
     @State private var activeAnnotationTimer = false
     @State private var selectedFlight: Flight?
+    @State private var isFlightInfoVisible = false
 
     var body: some View {
         @Bindable var ftvm = ftvm
@@ -31,7 +33,7 @@ struct ContentView: View {
                         .onTapGesture {
                             annotationSelected = true
                             activeAnnotationTimer = true
-                            ftvm.isFlightInfoVisible = true
+                            isFlightInfoVisible = true
                             selectedFlight = ftvm.flight
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                                 activeAnnotationTimer = false
@@ -42,7 +44,7 @@ struct ContentView: View {
             }
         }
         .safeAreaInset(edge: .bottom) {
-            if ftvm.isFlightInfoVisible {
+            if isFlightInfoVisible {
                 FlightInfoView(flight: ftvm.flight)
             } else {
                 InputView()
@@ -53,8 +55,22 @@ struct ContentView: View {
                 if annotationSelected {
                     annotationSelected = false
                     selectedFlight = nil
-                    ftvm.isFlightInfoVisible = false
+                    isFlightInfoVisible = false
                 }
+            }
+        }
+        .onChange(of: scenePhase) { _, newPhase in
+            switch newPhase {
+            case .active:
+                print("Active scene")
+                if ftvm.flight != nil {
+                    ftvm.startUpdateTimer()
+                }
+            case .background:
+                print("Background scene")
+                ftvm.stopUpdateTimer()
+            default:
+                print("\(newPhase) scene")
             }
         }
     }
