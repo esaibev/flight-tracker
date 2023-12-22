@@ -134,7 +134,7 @@ struct FlightInfoView: View {
                         .foregroundStyle(.darkGrayText)
                     }
                 }
-                .frame(minHeight: 72)
+                .frame(maxHeight: .infinity)
                 .padding(10)
                 .background(Color(red: 0.9176470588235294, green: 0.9176470588235294, blue: 0.9176470588235294))
                 .clipShape(RoundedRectangle(cornerRadius: 4))
@@ -208,11 +208,12 @@ struct FlightInfoView: View {
                         }
                     }
                 }
-                .frame(minHeight: 72)
+                .frame(maxHeight: .infinity)
                 .padding(10)
                 .background(Color(red: 0.9176470588235294, green: 0.9176470588235294, blue: 0.9176470588235294))
                 .clipShape(RoundedRectangle(cornerRadius: 4))
             }
+            .fixedSize(horizontal: false, vertical: true)
             .padding(.horizontal, 4)
         }
         .background(Color(red: 0.24705882352941178, green: 0.25882352941176473, blue: 0.2784313725490196, opacity: 0.75))
