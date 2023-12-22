@@ -16,6 +16,8 @@ class FlightTrackerVM {
     var errorMessage: String?
     var camera: MapCameraPosition = .region(.startingRegion)
     var updateNr = 1
+    var isFlightInfoVisible = false
+    var annotationSelected = false
 
     @ObservationIgnored private var updateTimer: Timer?
 
@@ -24,6 +26,8 @@ class FlightTrackerVM {
             let flight = try await FlightNetworkService.getFlight(flightIata)
             DispatchQueue.main.async {
                 self.flight = flight
+                self.isFlightInfoVisible = true
+                self.annotationSelected = true
                 self.startUpdateTimer()
                 self.updateCameraPosition(for: flight)
             }
