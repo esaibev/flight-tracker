@@ -41,13 +41,18 @@ struct ContentView: View {
                 .annotationTitles(.hidden)
             }
         }
-        .safeAreaInset(edge: .bottom) {
+        .ignoresSafeArea(.all)
+        .onMapCameraChange { context in
+            let region = context.region
+            ftvm.calculateBbox(from: region)
+        }
+        .overlay(alignment: .bottom, content: {
             if ftvm.isFlightInfoVisible {
                 FlightInfoView(flight: ftvm.flight)
             } else {
                 InputView()
             }
-        }
+        })
         .onTapGesture {
             if !activeAnnotationTimer {
                 if ftvm.annotationSelected {

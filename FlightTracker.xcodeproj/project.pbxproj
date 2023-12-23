@@ -18,6 +18,7 @@
 		66A227A12B30646600C46E65 /* Flight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66A227A02B30646600C46E65 /* Flight.swift */; };
 		66A227A32B30658D00C46E65 /* FlightNetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66A227A22B30658D00C46E65 /* FlightNetworkService.swift */; };
 		66AD01E42B30940B0023D2C8 /* flight-iata-filter.json in Resources */ = {isa = PBXBuildFile; fileRef = 66AD01E32B30940B0023D2C8 /* flight-iata-filter.json */; };
+		66E0A0942B36E7D6009D3022 /* flights-bbox-filter.json in Resources */ = {isa = PBXBuildFile; fileRef = 66E0A0932B36E7D6009D3022 /* flights-bbox-filter.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,6 +34,7 @@
 		66A227A02B30646600C46E65 /* Flight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Flight.swift; sourceTree = "<group>"; };
 		66A227A22B30658D00C46E65 /* FlightNetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlightNetworkService.swift; sourceTree = "<group>"; };
 		66AD01E32B30940B0023D2C8 /* flight-iata-filter.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "flight-iata-filter.json"; path = "../../../../../Library/Mobile Documents/com~apple~CloudDocs/School/HI1033/Lab2/JSON-filer/flight-iata-filter.json"; sourceTree = "<group>"; };
+		66E0A0932B36E7D6009D3022 /* flights-bbox-filter.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "flights-bbox-filter.json"; path = "../../../../../Library/Mobile Documents/com~apple~CloudDocs/School/HI1033/Lab2/JSON-filer/flights-bbox-filter.json"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,6 +109,7 @@
 		66AD01E22B3093A10023D2C8 /* resource */ = {
 			isa = PBXGroup;
 			children = (
+				66E0A0932B36E7D6009D3022 /* flights-bbox-filter.json */,
 				66AD01E32B30940B0023D2C8 /* flight-iata-filter.json */,
 			);
 			path = resource;
@@ -170,6 +173,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				66E0A0942B36E7D6009D3022 /* flights-bbox-filter.json in Resources */,
 				66AD01E42B30940B0023D2C8 /* flight-iata-filter.json in Resources */,
 				663671812B2F826900FC6234 /* Preview Assets.xcassets in Resources */,
 				6636717E2B2F826900FC6234 /* Assets.xcassets in Resources */,

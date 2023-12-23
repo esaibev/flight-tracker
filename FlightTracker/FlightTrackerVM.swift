@@ -13,13 +13,28 @@ import SwiftUI
 @Observable
 class FlightTrackerVM {
     var flight: Flight?
+//    var flights:
     var errorMessage: String?
     var camera: MapCameraPosition = .region(.startingRegion)
+    var bbox: (swLat: Double, swLon: Double, neLat: Double, neLon: Double) = (0, 0, 0, 0)
     var updateNr = 1
     var isFlightInfoVisible = false
     var annotationSelected = false
 
     @ObservationIgnored private var updateTimer: Timer?
+
+    func calculateBbox(from region: MKCoordinateRegion) {
+        let center = region.center
+        let span = region.span
+
+        let swLat = center.latitude - (span.latitudeDelta / 2.0)
+        let swLon = center.longitude - (span.longitudeDelta / 2.0)
+        let neLat = center.latitude + (span.latitudeDelta / 2.0)
+        let neLon = center.longitude + (span.longitudeDelta / 2.0)
+
+        bbox = (swLat, swLon, neLat, neLon)
+        print(bbox)
+    }
 
     func getFlight(_ flightIata: String) async {
         do {
