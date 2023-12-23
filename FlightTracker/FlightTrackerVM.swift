@@ -33,7 +33,7 @@ class FlightTrackerVM {
 
         // Calculate the zoom level
         zoomLevel = log2(360 / span.latitudeDelta)
-        print("Zoom Level: \(zoomLevel)")
+//        print("Zoom Level: \(zoomLevel)")
 
         let swLat = center.latitude - (span.latitudeDelta / 2.0)
         let swLon = center.longitude - (span.longitudeDelta / 2.0)

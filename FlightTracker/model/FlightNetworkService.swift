@@ -9,7 +9,8 @@ import Foundation
 
 struct FlightNetworkService {
     static func getFlights(_ bbox: (swLat: Double, swLon: Double, neLat: Double, neLon: Double)) async throws -> [Flight] {
-        return try getFlightsFromJSON()
+//        return try getFlightsFromJSON()
+        return try await getFlightsFromURL(bbox)
     }
 
     private static func getFlightsFromJSON() throws -> [Flight] {
@@ -20,6 +21,23 @@ struct FlightNetworkService {
         let decoder = JSONDecoder()
         let flightsResponse = try decoder.decode(FlightsResponse.self, from: data)
         return flightsResponse.response
+    }
+
+    private static func getFlightsFromURL(_ bbox: (swLat: Double, swLon: Double, neLat: Double, neLon: Double)) async throws -> [Flight] {
+        let urlString = "https://airlabs.co/api/v9/flights?api_key=8ba6bdb2-a617-455a-90aa-28510435a30d&bbox=\(bbox.swLat),\(bbox.swLon),\(bbox.neLat),\(bbox.neLon)"
+        guard let url = URL(string: urlString) else {
+            throw URLError(.badURL)
+        }
+        let (data, _) = try await URLSession.shared.data(from: url)
+
+        // Debugging: Print raw JSON data
+        if let jsonString = String(data: data, encoding: .utf8) {
+            print("JSON String: \(jsonString)\n")
+        }
+
+        let decoder = JSONDecoder()
+        let response = try decoder.decode(FlightsResponse.self, from: data)
+        return response.response
     }
 
     static func getFlight(_ flightIata: String) async throws -> Flight {
