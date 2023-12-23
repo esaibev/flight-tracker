@@ -18,28 +18,49 @@ struct ContentView: View {
         @Bindable var ftvm = ftvm
 
         Map(position: $ftvm.camera, interactionModes: [.zoom, .pan]) {
-            if ftvm.flight != nil {
-                Annotation("Flight " + (ftvm.flight?.flightIata ?? ""), coordinate: ftvm.getCoordinates()) {
+            ForEach(ftvm.flights, id: \.icao24) { flight in
+                Annotation("", coordinate: ftvm.getCoordinates(for: flight)) {
                     Image(systemName: "airplane")
                         .padding(15)
                         .font(.system(size: 24))
                         .foregroundStyle(.main)
-                        .rotationEffect(ftvm.getAngle())
+                        .rotationEffect(ftvm.getAngle(for: flight))
                         .shadow(color: Color(red: 0.0, green: 0.001, blue: 0.001, opacity: 0.5), radius: 1, x: 1, y: 2)
-                        .scaleEffect(ftvm.flight == selectedFlight ? 1.3 : 1)
-                        .animation(.spring(response: 0.3, dampingFraction: 0.5, blendDuration: 0.15), value: ftvm.flight == selectedFlight)
+                        .scaleEffect(flight == selectedFlight ? 1.3 : 1)
+                        .animation(.spring(response: 0.3, dampingFraction: 0.5, blendDuration: 0.15), value: flight == selectedFlight)
                         .onTapGesture {
                             ftvm.annotationSelected = true
                             activeAnnotationTimer = true
                             ftvm.isFlightInfoVisible = true
-                            selectedFlight = ftvm.flight
+                            selectedFlight = flight
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                                 activeAnnotationTimer = false
                             }
                         }
                 }
-                .annotationTitles(.hidden)
             }
+
+//            if ftvm.flight != nil {
+//                Annotation("Flight " + (ftvm.flight?.flightIata ?? ""), coordinate: ftvm.getCoordinates()) {
+//                    Image(systemName: "airplane")
+//                        .padding(15)
+//                        .font(.system(size: 24))
+//                        .foregroundStyle(.main)
+//                        .rotationEffect(ftvm.getAngle())
+//                        .shadow(color: Color(red: 0.0, green: 0.001, blue: 0.001, opacity: 0.5), radius: 1, x: 1, y: 2)
+//                        .scaleEffect(ftvm.flight == selectedFlight ? 1.3 : 1)
+//                        .animation(.spring(response: 0.3, dampingFraction: 0.5, blendDuration: 0.15), value: ftvm.flight == selectedFlight)
+//                        .onTapGesture {
+//                            ftvm.annotationSelected = true
+//                            activeAnnotationTimer = true
+//                            ftvm.isFlightInfoVisible = true
+//                            selectedFlight = ftvm.flight
+//                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+//                                activeAnnotationTimer = false
+//                            }
+//                        }
+//                }
+//                .annotationTitles(.hidden)
         }
         .ignoresSafeArea(.all)
         .onMapCameraChange { context in
@@ -48,7 +69,7 @@ struct ContentView: View {
         }
         .overlay(alignment: .bottom, content: {
             if ftvm.isFlightInfoVisible {
-                FlightInfoView(flight: ftvm.flight)
+                FlightInfoView(flight: selectedFlight)
             } else {
                 InputView()
             }

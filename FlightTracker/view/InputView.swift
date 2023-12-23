@@ -47,7 +47,8 @@ struct InputView: View {
                         isInputActive = false
                         showCancelButton = false
                         Task {
-                            await ftvm.getFlight(searchText)
+                            await ftvm.getFlights()
+//                            await ftvm.getFlight(searchText)
                         }
                     }
                     .submitLabel(.search)

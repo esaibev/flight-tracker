@@ -13,7 +13,7 @@ import SwiftUI
 @Observable
 class FlightTrackerVM {
     var flight: Flight?
-//    var flights:
+    var flights: [Flight] = []
     var errorMessage: String?
     var camera: MapCameraPosition = .region(.startingRegion)
     var bbox: (swLat: Double, swLon: Double, neLat: Double, neLon: Double) = (0, 0, 0, 0)
@@ -21,11 +21,19 @@ class FlightTrackerVM {
     var isFlightInfoVisible = false
     var annotationSelected = false
 
+    @ObservationIgnored private var zoomLevel = 5.0
     @ObservationIgnored private var updateTimer: Timer?
 
     func calculateBbox(from region: MKCoordinateRegion) {
         let center = region.center
         let span = region.span
+
+//        print("LatDelta: \(span.latitudeDelta)")
+//        print("LonDelta: \(span.longitudeDelta)")
+
+        // Calculate the zoom level
+        zoomLevel = log2(360 / span.latitudeDelta)
+        print("Zoom Level: \(zoomLevel)")
 
         let swLat = center.latitude - (span.latitudeDelta / 2.0)
         let swLon = center.longitude - (span.longitudeDelta / 2.0)
@@ -33,7 +41,23 @@ class FlightTrackerVM {
         let neLon = center.longitude + (span.longitudeDelta / 2.0)
 
         bbox = (swLat, swLon, neLat, neLon)
-        print(bbox)
+//        print(bbox)
+    }
+
+    func getFlights() async {
+        do {
+            let flights = try await FlightNetworkService.getFlights(bbox)
+            DispatchQueue.main.async {
+                self.flights = flights
+                print(self.flights)
+            }
+        } catch {
+            DispatchQueue.main.async {
+                self.errorMessage = error.localizedDescription
+                print("Error getting flights: \(error.localizedDescription)")
+                print("Detailed info: \(error)")
+            }
+        }
     }
 
     func getFlight(_ flightIata: String) async {
@@ -75,11 +99,23 @@ class FlightTrackerVM {
         }
     }
 
+    func getCoordinates(for flight: Flight) -> CLLocationCoordinate2D {
+        if flight.lat != nil && flight.lon != nil {
+            return CLLocationCoordinate2D(latitude: (flight.lat)!, longitude: (flight.lon)!)
+        }
+        return CLLocationCoordinate2D(latitude: 0, longitude: 0)
+    }
+
     func getCoordinates() -> CLLocationCoordinate2D {
         if flight?.lat != nil && flight?.lon != nil {
             return CLLocationCoordinate2D(latitude: (flight?.lat)!, longitude: (flight?.lon)!)
         }
         return CLLocationCoordinate2D(latitude: 0, longitude: 0)
+    }
+
+    func getAngle(for flight: Flight) -> Angle {
+        guard let dir = flight.dir else { return Angle(degrees: 0) }
+        return Angle(degrees: dir - 90)
     }
 
     func getAngle() -> Angle {
