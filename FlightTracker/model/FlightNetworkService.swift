@@ -8,23 +8,13 @@
 import Foundation
 
 struct FlightNetworkService {
-    static func getFlights(_ bbox: (swLat: Double, swLon: Double, neLat: Double, neLon: Double)) async throws -> [Flight] {
+    static func getFlights(_ bbox: (swLat: Double, swLon: Double, neLat: Double, neLon: Double), _ zoomLevel: Int) async throws -> [Flight] {
 //        return try getFlightsFromJSON()
-        return try await getFlightsFromURL(bbox)
+        return try await getFlightsFromURL(bbox, zoomLevel)
     }
 
-    private static func getFlightsFromJSON() throws -> [Flight] {
-        guard let path = Bundle.main.path(forResource: "flights-bbox-filter", ofType: "json") else {
-            throw NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Unable to find the JSON file"])
-        }
-        let data = try Data(contentsOf: URL(fileURLWithPath: path))
-        let decoder = JSONDecoder()
-        let flightsResponse = try decoder.decode(FlightsResponse.self, from: data)
-        return flightsResponse.response
-    }
-
-    private static func getFlightsFromURL(_ bbox: (swLat: Double, swLon: Double, neLat: Double, neLon: Double)) async throws -> [Flight] {
-        let urlString = "https://airlabs.co/api/v9/flights?api_key=8ba6bdb2-a617-455a-90aa-28510435a30d&bbox=\(bbox.swLat),\(bbox.swLon),\(bbox.neLat),\(bbox.neLon)"
+    private static func getFlightsFromURL(_ bbox: (swLat: Double, swLon: Double, neLat: Double, neLon: Double), _ zoomLevel: Int) async throws -> [Flight] {
+        let urlString = "https://airlabs.co/api/v9/flights?api_key=8ba6bdb2-a617-455a-90aa-28510435a30d&bbox=\(bbox.swLat),\(bbox.swLon),\(bbox.neLat),\(bbox.neLon)&zoom=\(zoomLevel)"
         guard let url = URL(string: urlString) else {
             throw URLError(.badURL)
         }
@@ -38,6 +28,16 @@ struct FlightNetworkService {
         let decoder = JSONDecoder()
         let response = try decoder.decode(FlightsResponse.self, from: data)
         return response.response
+    }
+
+    private static func getFlightsFromJSON() throws -> [Flight] {
+        guard let path = Bundle.main.path(forResource: "flights-bbox-filter", ofType: "json") else {
+            throw NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Unable to find the JSON file"])
+        }
+        let data = try Data(contentsOf: URL(fileURLWithPath: path))
+        let decoder = JSONDecoder()
+        let flightsResponse = try decoder.decode(FlightsResponse.self, from: data)
+        return flightsResponse.response
     }
 
     static func getFlight(_ flightIata: String) async throws -> Flight {

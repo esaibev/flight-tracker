@@ -21,7 +21,7 @@ class FlightTrackerVM {
     var isFlightInfoVisible = false
     var annotationSelected = false
 
-    @ObservationIgnored private var zoomLevel = 5.0
+    @ObservationIgnored private var zoomLevel = 5
     @ObservationIgnored private var updateTimer: Timer?
 
     func calculateBbox(from region: MKCoordinateRegion) {
@@ -32,8 +32,13 @@ class FlightTrackerVM {
 //        print("LonDelta: \(span.longitudeDelta)")
 
         // Calculate the zoom level
-        zoomLevel = log2(360 / span.latitudeDelta)
-//        print("Zoom Level: \(zoomLevel)")
+        zoomLevel = Int(log2(360 / span.latitudeDelta))
+        if zoomLevel < 2 {
+            zoomLevel = 0
+        }
+
+        print("Zoom Level: \(zoomLevel)")
+        print("Zoom level (Int) \(Int(zoomLevel))")
 
         let swLat = center.latitude - (span.latitudeDelta / 2.0)
         let swLon = center.longitude - (span.longitudeDelta / 2.0)
@@ -41,12 +46,12 @@ class FlightTrackerVM {
         let neLon = center.longitude + (span.longitudeDelta / 2.0)
 
         bbox = (swLat, swLon, neLat, neLon)
-//        print(bbox)
+        print(bbox)
     }
 
     func getFlights() async {
         do {
-            let flights = try await FlightNetworkService.getFlights(bbox)
+            let flights = try await FlightNetworkService.getFlights(bbox, zoomLevel)
             DispatchQueue.main.async {
                 self.flights = flights
                 print(self.flights)
