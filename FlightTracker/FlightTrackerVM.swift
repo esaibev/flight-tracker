@@ -18,7 +18,6 @@ class FlightTrackerVM {
     var camera: MapCameraPosition = .region(.startingRegion)
     var bbox: (swLat: Double, swLon: Double, neLat: Double, neLon: Double) = (0, 0, 0, 0)
     var updateNr = 1
-    var isFlightInfoVisible = false
     var annotationSelected = false
 
     @ObservationIgnored private var zoomLevel = 5
@@ -33,8 +32,6 @@ class FlightTrackerVM {
         if zoomLevel < 2 {
             zoomLevel = 0
         }
-
-//        print("Zoom Level: \(zoomLevel)")
 
         let swLat = center.latitude - (span.latitudeDelta / 2.0)
         let swLon = center.longitude - (span.longitudeDelta / 2.0)
@@ -83,7 +80,6 @@ class FlightTrackerVM {
             DispatchQueue.main.async {
                 self.flights.append(flight)
                 self.selectedFlight = flight
-                self.isFlightInfoVisible = true
                 self.annotationSelected = true
                 self.updateCameraPosition(for: flight)
             }

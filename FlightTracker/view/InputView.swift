@@ -47,7 +47,6 @@ struct InputView: View {
                         isInputActive = false
                         showCancelButton = false
                         Task {
-//                            await ftvm.getFlights()
                             await ftvm.getFlight(searchText)
                         }
                     }

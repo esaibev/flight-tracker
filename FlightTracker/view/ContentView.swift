@@ -30,7 +30,6 @@ struct ContentView: View {
                         .onTapGesture {
                             ftvm.annotationSelected = true
                             activeAnnotationTimer = true
-                            ftvm.isFlightInfoVisible = true
                             ftvm.selectedFlight = flight
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                                 activeAnnotationTimer = false
@@ -49,7 +48,7 @@ struct ContentView: View {
             ftvm.calculateBbox(from: region)
         }
         .overlay(alignment: .bottom, content: {
-            if ftvm.isFlightInfoVisible {
+            if ftvm.selectedFlight != nil {
                 FlightInfoView(flight: ftvm.selectedFlight)
             } else {
                 InputView()
@@ -60,7 +59,6 @@ struct ContentView: View {
                 if ftvm.annotationSelected {
                     ftvm.annotationSelected = false
                     ftvm.selectedFlight = nil
-                    ftvm.isFlightInfoVisible = false
                 }
             }
         }
