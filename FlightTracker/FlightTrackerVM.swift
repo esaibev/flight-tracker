@@ -81,10 +81,10 @@ class FlightTrackerVM {
         do {
             let flight = try await FlightNetworkService.getFlight(flightIata)
             DispatchQueue.main.async {
+                self.flights.append(flight)
                 self.selectedFlight = flight
                 self.isFlightInfoVisible = true
                 self.annotationSelected = true
-                self.startUpdateTimer()
                 self.updateCameraPosition(for: flight)
             }
 //            print(flight)
@@ -141,7 +141,7 @@ class FlightTrackerVM {
             centerCoordinate = CLLocationCoordinate2D(latitude: 0, longitude: 0)
         }
         withAnimation(.spring()) {
-            self.camera = MapCameraPosition.region(MKCoordinateRegion(center: centerCoordinate, latitudinalMeters: 400000, longitudinalMeters: 400000))
+            self.camera = MapCameraPosition.region(MKCoordinateRegion(center: centerCoordinate, latitudinalMeters: 200000, longitudinalMeters: 200000))
         }
     }
 }
