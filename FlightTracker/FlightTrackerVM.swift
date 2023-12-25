@@ -37,8 +37,7 @@ class FlightTrackerVM {
             zoomLevel = 0
         }
 
-        print("Zoom Level: \(zoomLevel)")
-        print("Zoom level (Int) \(Int(zoomLevel))")
+//        print("Zoom Level: \(zoomLevel)")
 
         let swLat = center.latitude - (span.latitudeDelta / 2.0)
         let swLon = center.longitude - (span.longitudeDelta / 2.0)
@@ -46,7 +45,7 @@ class FlightTrackerVM {
         let neLon = center.longitude + (span.longitudeDelta / 2.0)
 
         bbox = (swLat, swLon, neLat, neLon)
-        print(bbox)
+//        print(bbox)
     }
 
     func getFlights() async {
@@ -62,6 +61,24 @@ class FlightTrackerVM {
                 print("Error getting flights: \(error.localizedDescription)")
                 print("Detailed info: \(error)")
             }
+        }
+    }
+
+    func getFlightInfo(_ flightIata: String) async -> Flight? {
+        do {
+            let flight = try await FlightNetworkService.getFlight(flightIata)
+            DispatchQueue.main.async {
+                self.flight = flight
+            }
+            print("Flight info: \(flight)")
+            return flight
+        } catch {
+            DispatchQueue.main.async {
+                self.errorMessage = error.localizedDescription
+                print("Error getting flight info: \(error.localizedDescription)")
+                print("Detailed info: \(error)")
+            }
+            return nil
         }
     }
 
@@ -111,20 +128,8 @@ class FlightTrackerVM {
         return CLLocationCoordinate2D(latitude: 0, longitude: 0)
     }
 
-    func getCoordinates() -> CLLocationCoordinate2D {
-        if flight?.lat != nil && flight?.lon != nil {
-            return CLLocationCoordinate2D(latitude: (flight?.lat)!, longitude: (flight?.lon)!)
-        }
-        return CLLocationCoordinate2D(latitude: 0, longitude: 0)
-    }
-
     func getAngle(for flight: Flight) -> Angle {
         guard let dir = flight.dir else { return Angle(degrees: 0) }
-        return Angle(degrees: dir - 90)
-    }
-
-    func getAngle() -> Angle {
-        guard let dir = flight?.dir else { return Angle(degrees: 0) }
         return Angle(degrees: dir - 90)
     }
 

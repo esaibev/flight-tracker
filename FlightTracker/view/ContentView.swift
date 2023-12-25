@@ -26,8 +26,8 @@ struct ContentView: View {
                         .foregroundStyle(.main)
                         .rotationEffect(ftvm.getAngle(for: flight))
                         .shadow(color: Color(red: 0.0, green: 0.001, blue: 0.001, opacity: 0.5), radius: 1, x: 1, y: 2)
-                        .scaleEffect(flight == selectedFlight ? 1.3 : 1)
-                        .animation(.spring(response: 0.3, dampingFraction: 0.5, blendDuration: 0.15), value: flight == selectedFlight)
+                        .scaleEffect(flight.icao24 == selectedFlight?.icao24 ? 1.3 : 1)
+                        .animation(.spring(response: 0.3, dampingFraction: 0.5, blendDuration: 0.15), value: flight.icao24 == selectedFlight?.icao24)
                         .onTapGesture {
                             ftvm.annotationSelected = true
                             activeAnnotationTimer = true
@@ -35,6 +35,12 @@ struct ContentView: View {
                             selectedFlight = flight
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                                 activeAnnotationTimer = false
+                            }
+                            Task {
+                                guard let flightIata = flight.flightIata else { return }
+                                if let detailedFlight = await ftvm.getFlightInfo(flightIata) {
+                                    selectedFlight = detailedFlight
+                                }
                             }
                         }
                 }
@@ -61,20 +67,20 @@ struct ContentView: View {
                 }
             }
         }
-        .onChange(of: scenePhase) { _, newPhase in
-            switch newPhase {
-            case .active:
-                print("Active scene")
-                if ftvm.flight != nil {
-                    ftvm.startUpdateTimer()
-                }
-            case .background:
-                print("Background scene")
-                ftvm.stopUpdateTimer()
-            default:
-                print("\(newPhase) scene")
-            }
-        }
+//        .onChange(of: scenePhase) { _, newPhase in
+//            switch newPhase {
+//            case .active:
+//                print("Active scene")
+//                if ftvm.flight != nil {
+//                    ftvm.startUpdateTimer()
+//                }
+//            case .background:
+//                print("Background scene")
+//                ftvm.stopUpdateTimer()
+//            default:
+//                print("\(newPhase) scene")
+//            }
+//        }
     }
 }
 
