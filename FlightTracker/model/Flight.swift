@@ -9,8 +9,6 @@ import Foundation
 
 struct Flight: Codable, Equatable {
     let aircraftIcao: String?
-    let airlineIata: String?
-    let airlineIcao: String?
     let airlineName: String?
     let flightIata: String?
     let flightIcao: String?
@@ -19,7 +17,6 @@ struct Flight: Codable, Equatable {
     let arrIata: String?
     let arrCity: String?
     let status: String?
-    let duration: Int?
     let arrDelayed: Int?
     let icao24: String?
     let regNr: String?
@@ -35,8 +32,6 @@ struct Flight: Codable, Equatable {
 
     enum CodingKeys: String, CodingKey {
         case aircraftIcao = "aircraft_icao"
-        case airlineIata = "airline_iata"
-        case airlineIcao = "airline_icao"
         case airlineName = "airline_name"
         case flightIata = "flight_iata"
         case flightIcao = "flight_icao"
@@ -45,7 +40,6 @@ struct Flight: Codable, Equatable {
         case arrIata = "arr_iata"
         case arrCity = "arr_city"
         case status
-        case duration
         case arrDelayed = "arr_delayed"
         case icao24 = "hex"
         case regNr = "reg_number"

@@ -12,7 +12,7 @@ import SwiftUI
 
 @Observable
 class FlightTrackerVM {
-    var flight: Flight?
+    var selectedFlight: Flight?
     var flights: [Flight] = []
     var errorMessage: String?
     var camera: MapCameraPosition = .region(.startingRegion)
@@ -27,9 +27,6 @@ class FlightTrackerVM {
     func calculateBbox(from region: MKCoordinateRegion) {
         let center = region.center
         let span = region.span
-
-//        print("LatDelta: \(span.latitudeDelta)")
-//        print("LonDelta: \(span.longitudeDelta)")
 
         // Calculate the zoom level
         zoomLevel = Int(log2(360 / span.latitudeDelta))
@@ -53,7 +50,7 @@ class FlightTrackerVM {
             let flights = try await FlightNetworkService.getFlights(bbox, zoomLevel)
             DispatchQueue.main.async {
                 self.flights = flights
-                print(self.flights)
+//                print(self.flights)
             }
         } catch {
             DispatchQueue.main.async {
@@ -68,7 +65,7 @@ class FlightTrackerVM {
         do {
             let flight = try await FlightNetworkService.getFlight(flightIata)
             DispatchQueue.main.async {
-                self.flight = flight
+                self.selectedFlight = flight
             }
             print("Flight info: \(flight)")
             return flight
@@ -86,7 +83,7 @@ class FlightTrackerVM {
         do {
             let flight = try await FlightNetworkService.getFlight(flightIata)
             DispatchQueue.main.async {
-                self.flight = flight
+                self.selectedFlight = flight
                 self.isFlightInfoVisible = true
                 self.annotationSelected = true
                 self.startUpdateTimer()
@@ -95,27 +92,9 @@ class FlightTrackerVM {
             print(flight)
         } catch {
             DispatchQueue.main.async {
-                self.flight = nil
+                self.selectedFlight = nil
                 self.errorMessage = error.localizedDescription
                 print("Error getting flight: \(error.localizedDescription)")
-                print("Detailed info: \(error)")
-            }
-        }
-    }
-
-    private func refreshFlightData() async {
-        guard let flightIata = flight?.flightIata else { return }
-        do {
-            let flight = try await FlightNetworkService.getFlight(flightIata)
-            DispatchQueue.main.async {
-                self.flight = flight
-            }
-        } catch {
-            DispatchQueue.main.async {
-                self.flight = nil
-                self.stopUpdateTimer()
-                self.errorMessage = error.localizedDescription
-                print("Error updating flight: \(error.localizedDescription)")
                 print("Detailed info: \(error)")
             }
         }
@@ -135,12 +114,15 @@ class FlightTrackerVM {
 
     func startUpdateTimer() {
         stopUpdateTimer()
+        Task {
+            await self.getFlights()
+        }
         updateTimer = Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true) { [weak self] _ in
             guard let self = self else { return }
             Task {
                 print("Update \(self.updateNr)")
                 self.updateNr += 1
-                await self.refreshFlightData()
+                await self.getFlights()
             }
         }
     }

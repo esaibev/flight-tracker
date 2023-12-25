@@ -17,10 +17,12 @@ struct FlightInfoView: View {
             HStack {
                 VStack(alignment: .leading) {
                     HStack(spacing: 7) {
-                        Text("\(self.flight?.flightIata ?? "")")
-                            .font(.system(size: 16))
-                            .fontWeight(.bold)
-                            .foregroundStyle(.main)
+                        if let flightIata = self.flight?.flightIata {
+                            Text("\(flightIata)")
+                                .font(.system(size: 16))
+                                .fontWeight(.bold)
+                                .foregroundStyle(.main)
+                        }
 
                         if self.flight?.aircraftIcao != nil {
                             Text("\(self.flight?.aircraftIcao ?? "")")
@@ -231,6 +233,6 @@ extension String {
 }
 
 #Preview {
-    FlightInfoView(flight: Flight(aircraftIcao: "B788", airlineIata: "AA", airlineIcao: "AAL", airlineName: "American Airlines", flightIata: "AA719", flightIcao: "AAL719", depIata: "FCO", depCity: "Rome", arrIata: "PHL", arrCity: "Philadelphia", status: "en-route", duration: 585, arrDelayed: 32, icao24: "AC0196", regNr: "N873BB", lat: 43.34963, lon: 8.27349, alt: 10972, dir: 292, speed: 820, vSpeed: -0.3, built: 2020, percent: 15, eta: 499))
+    FlightInfoView(flight: Flight(aircraftIcao: "B788", airlineName: "American Airlines", flightIata: "AA719", flightIcao: "AAL719", depIata: "FCO", depCity: "Rome", arrIata: "PHL", arrCity: "Philadelphia", status: "en-route", arrDelayed: 32, icao24: "AC0196", regNr: "N873BB", lat: 43.34963, lon: 8.27349, alt: 10972, dir: 292, speed: 820, vSpeed: -0.3, built: 2020, percent: 15, eta: 499))
         .preferredColorScheme(.light)
 }
