@@ -37,9 +37,7 @@ struct ContentView: View {
                             }
                             Task {
                                 guard let flightIata = flight.flightIata else { return }
-                                if let detailedFlight = await ftvm.getFlightInfo(flightIata) {
-                                    ftvm.selectedFlight = detailedFlight
-                                }
+                                await ftvm.getFlightInfo(flightIata)
                             }
                         }
                 }

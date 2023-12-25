@@ -61,21 +61,19 @@ class FlightTrackerVM {
         }
     }
 
-    func getFlightInfo(_ flightIata: String) async -> Flight? {
+    func getFlightInfo(_ flightIata: String) async {
         do {
             let flight = try await FlightNetworkService.getFlight(flightIata)
             DispatchQueue.main.async {
                 self.selectedFlight = flight
             }
             print("Flight info: \(flight)")
-            return flight
         } catch {
             DispatchQueue.main.async {
                 self.errorMessage = error.localizedDescription
                 print("Error getting flight info: \(error.localizedDescription)")
                 print("Detailed info: \(error)")
             }
-            return nil
         }
     }
 
@@ -89,7 +87,7 @@ class FlightTrackerVM {
                 self.startUpdateTimer()
                 self.updateCameraPosition(for: flight)
             }
-            print(flight)
+//            print(flight)
         } catch {
             DispatchQueue.main.async {
                 self.selectedFlight = nil
@@ -123,6 +121,9 @@ class FlightTrackerVM {
                 print("Update \(self.updateNr)")
                 self.updateNr += 1
                 await self.getFlights()
+                if let flightIata = self.selectedFlight?.flightIata {
+                    await self.getFlightInfo(flightIata)
+                }
             }
         }
     }

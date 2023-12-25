@@ -51,13 +51,13 @@ struct FlightInfoView: View {
                 Spacer()
 
                 VStack(alignment: .trailing) {
-                    if self.flight?.status != nil {
-                        Text("\(self.flight?.status?.capitalizingFirstLetter() ?? "")")
+                    if let status = flight?.status {
+                        Text("\(status.capitalizingFirstLetter())")
                             .font(.system(size: 12))
                             .foregroundStyle(.white)
                             .padding(.horizontal, 4)
                             .padding(.vertical, 2)
-                            .background(.greenBg)
+                            .background(backgroundColor(for: status))
                             .clipShape(RoundedRectangle(cornerRadius: 2))
                     }
                     Group {
@@ -222,6 +222,17 @@ struct FlightInfoView: View {
     }
 }
 
+private func backgroundColor(for status: String) -> Color {
+    switch status {
+    case "scheduled":
+        return Color(.black)
+    case "landed":
+        return Color.blue
+    default:
+        return Color.greenBg
+    }
+}
+
 extension String {
     func capitalizingFirstLetter() -> String {
         return prefix(1).capitalized + dropFirst()
@@ -233,6 +244,6 @@ extension String {
 }
 
 #Preview {
-    FlightInfoView(flight: Flight(aircraftIcao: "B788", airlineName: "American Airlines", flightIata: "AA719", flightIcao: "AAL719", depIata: "FCO", depCity: "Rome", arrIata: "PHL", arrCity: "Philadelphia", status: "en-route", arrDelayed: 32, icao24: "AC0196", regNr: "N873BB", lat: 43.34963, lon: 8.27349, alt: 10972, dir: 292, speed: 820, vSpeed: -0.3, built: 2020, percent: 15, eta: 499))
+    FlightInfoView(flight: Flight(aircraftIcao: "B788", airlineName: "American Airlines", flightIata: "AA719", flightIcao: "AAL719", depIata: "FCO", depCity: "Rome", arrIata: "PHL", arrCity: "Philadelphia", status: "scheduled", arrDelayed: 32, icao24: "AC0196", regNr: "N873BB", lat: 43.34963, lon: 8.27349, alt: 10972, dir: 292, speed: 820, vSpeed: -0.3, built: 2020, percent: 15, eta: 499))
         .preferredColorScheme(.light)
 }
