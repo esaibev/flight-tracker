@@ -19,26 +19,23 @@ struct ContentView: View {
         Map(position: $ftvm.camera, interactionModes: [.zoom, .pan]) {
             ForEach(ftvm.flights, id: \.icao24) { flight in
                 Annotation("", coordinate: ftvm.getCoordinates(for: flight)) {
-                    Image(systemName: "airplane")
-                        .padding(15)
-                        .font(.system(size: 24))
-                        .foregroundStyle(.main)
-                        .rotationEffect(ftvm.getAngle(for: flight))
-                        .shadow(color: Color(red: 0.0, green: 0.001, blue: 0.001, opacity: 0.5), radius: 1, x: 1, y: 2)
-                        .scaleEffect(flight.icao24 == ftvm.selectedFlight?.icao24 ? 1.3 : 1)
-                        .animation(.spring(response: 0.3, dampingFraction: 0.5, blendDuration: 0.15), value: flight.icao24 == ftvm.selectedFlight?.icao24)
-                        .onTapGesture {
-                            ftvm.annotationSelected = true
-                            activeAnnotationTimer = true
-                            ftvm.selectedFlight = flight
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                                activeAnnotationTimer = false
-                            }
-                            Task {
-                                guard let flightIata = flight.flightIata else { return }
-                                await ftvm.getFlightInfo(flightIata)
-                            }
+                    CustomFlightAnnotationView(
+                        isSelected: flight.icao24 == ftvm.selectedFlight?.icao24,
+                        flight: flight,
+                        rotationAngle: ftvm.getAngle(for: flight)
+                    )
+                    .onTapGesture {
+                        ftvm.annotationSelected = true
+                        activeAnnotationTimer = true
+                        ftvm.selectedFlight = flight
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                            activeAnnotationTimer = false
                         }
+                        Task {
+                            guard let flightIata = flight.flightIata else { return }
+                            await ftvm.getFlightInfo(flightIata)
+                        }
+                    }
                 }
             }
         }
@@ -73,6 +70,44 @@ struct ContentView: View {
             default:
                 print("\(newPhase) scene")
             }
+        }
+    }
+
+    struct CustomFlightAnnotationView: View {
+        var isSelected: Bool
+        var flight: Flight
+        var rotationAngle: Angle
+
+        var body: some View {
+            ZStack {
+                if isSelected {
+                    PulsatingEffectView()
+                }
+                Image(systemName: "airplane")
+                    .padding(15)
+                    .font(.system(size: 24))
+                    .foregroundStyle(.main)
+                    .rotationEffect(rotationAngle)
+                    .shadow(color: Color(red: 0.0, green: 0.001, blue: 0.001, opacity: 0.5), radius: 1, x: 1, y: 2)
+                    .scaleEffect(isSelected ? 1.3 : 1)
+                    .animation(.spring(response: 0.3, dampingFraction: 0.5, blendDuration: 0.15), value: isSelected)
+            }
+        }
+    }
+
+    struct PulsatingEffectView: View {
+        @State private var animate = false
+
+        var body: some View {
+            Circle()
+                .fill(Color.white.opacity(1))
+                .frame(width: 24, height: 24)
+                .scaleEffect(animate ? 2 : 1)
+                .opacity(animate ? 0 : 1)
+                .animation(.easeOut(duration: 1.7).repeatForever(autoreverses: false), value: animate)
+                .onAppear {
+                    self.animate = true
+                }
         }
     }
 }

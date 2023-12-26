@@ -45,9 +45,14 @@ class FlightTrackerVM {
     func getFlights() async {
         do {
             let flights = try await FlightNetworkService.getFlights(bbox, zoomLevel)
+
             DispatchQueue.main.async {
-                self.flights = flights
-//                print(self.flights)
+                if let selected = self.selectedFlight, !flights.contains(where: { $0.icao24 == selected.icao24 }) {
+                    // Append selectedFlight to flights if it wasn't included in the fetch
+                    self.flights = flights + [selected]
+                } else {
+                    self.flights = flights
+                }
             }
         } catch {
             DispatchQueue.main.async {
