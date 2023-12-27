@@ -9,16 +9,16 @@ import Foundation
 
 struct FlightNetworkService {
     static func getFlights(_ bbox: (swLat: Double, swLon: Double, neLat: Double, neLon: Double), _ zoomLevel: Int) async throws -> [Flight] {
-//        return try getFlightsFromJSON()
-        return try await getFlightsFromURL(bbox, zoomLevel)
+        return try getFlightsFromJSON()
+//        return try await getFlightsFromURL(bbox, zoomLevel)
     }
 
     static func getFlight(_ flightIata: String) async throws -> Flight {
         // Get data from JSON to save API calls
-//        return try getFlightFromJSON()
+        return try getFlightFromJSON()
 
         // Standard way of getting data
-        return try await getFlightFromURL(flightIata)
+//        return try await getFlightFromURL(flightIata)
     }
 
     private static func getFlightsFromURL(_ bbox: (swLat: Double, swLon: Double, neLat: Double, neLon: Double), _ zoomLevel: Int) async throws -> [Flight] {

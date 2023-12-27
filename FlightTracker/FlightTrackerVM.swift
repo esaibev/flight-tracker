@@ -19,6 +19,13 @@ class FlightTrackerVM {
     var bbox: (swLat: Double, swLon: Double, neLat: Double, neLon: Double) = (0, 0, 0, 0)
     var updateNr = 1
     var annotationSelected = false
+    var isShowingBriefSheet = false
+
+    init() {
+        Task {
+            await getFlight("")
+        }
+    }
 
     @ObservationIgnored private var zoomLevel = 5
     @ObservationIgnored private var updateTimer: Timer?
@@ -84,6 +91,7 @@ class FlightTrackerVM {
             let flight = try await FlightNetworkService.getFlight(flightIata)
             DispatchQueue.main.async {
                 self.flights.append(flight)
+                self.isShowingBriefSheet = true
                 self.selectedFlight = flight
                 self.annotationSelected = true
                 self.updateCameraPosition(for: flight)

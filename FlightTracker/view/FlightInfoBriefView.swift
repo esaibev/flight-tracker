@@ -1,13 +1,13 @@
 //
-//  FlightInfoView.swift
+//  FlightInfoBriefView.swift
 //  FlightTracker
 //
-//  Created by Esaias Bevegård on 2023-12-20.
+//  Created by Esaias Bevegård on 2023-12-27.
 //
 
 import SwiftUI
 
-struct FlightInfoView: View {
+struct FlightInfoBriefView: View {
     var flight: Flight?
     @Environment(\.colorScheme) var colorScheme
 
@@ -52,7 +52,7 @@ struct FlightInfoView: View {
 
                 VStack(alignment: .trailing) {
                     if let status = flight?.status {
-                        Text("\(status.capitalizingFirstLetter())")
+                        Text("\(status.capitalizingFirstLetterN())")
                             .font(.system(size: 12))
                             .foregroundStyle(.white)
                             .padding(.horizontal, 4)
@@ -218,7 +218,8 @@ struct FlightInfoView: View {
             .fixedSize(horizontal: false, vertical: true)
             .padding(.horizontal, 4)
         }
-//        .background(Color(red: 0.24705882352941178, green: 0.25882352941176473, blue: 0.2784313725490196, opacity: 0.75))
+        .frame(alignment: .bottom)
+        .background(Color(red: 0.24705882352941178, green: 0.25882352941176473, blue: 0.2784313725490196, opacity: 0.75))
     }
 }
 
@@ -234,16 +235,16 @@ private func backgroundColor(for status: String) -> Color {
 }
 
 extension String {
-    func capitalizingFirstLetter() -> String {
+    func capitalizingFirstLetterN() -> String {
         return prefix(1).capitalized + dropFirst()
     }
 
-    mutating func capitalizeFirstLetter() {
+    mutating func capitalizeFirstLetterN() {
         self = self.capitalizingFirstLetter()
     }
 }
 
 #Preview {
-    FlightInfoView(flight: Flight(aircraftIcao: "B788", airlineName: "American Airlines", flightIata: "AA719", flightIcao: "AAL719", depIata: "FCO", depCity: "Rome", arrIata: "PHL", arrCity: "Philadelphia", status: "scheduled", arrDelayed: 32, icao24: "AC0196", regNr: "N873BB", lat: 43.34963, lon: 8.27349, alt: 10972, dir: 292, speed: 820, vSpeed: -0.3, built: 2020, percent: 15, eta: 499))
+    FlightInfoBriefView(flight: Flight(aircraftIcao: "B788", airlineName: "American Airlines", flightIata: "AA719", flightIcao: "AAL719", depIata: "FCO", depCity: "Rome", arrIata: "PHL", arrCity: "Philadelphia", status: "scheduled", arrDelayed: 32, icao24: "AC0196", regNr: "N873BB", lat: 43.34963, lon: 8.27349, alt: 10972, dir: 292, speed: 820, vSpeed: -0.3, built: 2020, percent: 15, eta: 499))
         .preferredColorScheme(.light)
 }

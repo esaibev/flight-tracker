@@ -28,6 +28,7 @@ struct ContentView: View {
                         ftvm.annotationSelected = true
                         activeAnnotationTimer = true
                         ftvm.selectedFlight = flight
+                        ftvm.isShowingBriefSheet = true
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                             activeAnnotationTimer = false
                         }
@@ -44,17 +45,11 @@ struct ContentView: View {
             let region = context.region
             ftvm.calculateBbox(from: region)
         }
-        .overlay(alignment: .bottom, content: {
-            if ftvm.selectedFlight != nil {
-                FlightInfoView(flight: ftvm.selectedFlight)
-            } else {
-                InputView()
-            }
-        })
         .onTapGesture {
             if !activeAnnotationTimer {
                 if ftvm.annotationSelected {
                     ftvm.annotationSelected = false
+                    ftvm.isShowingBriefSheet = false
                     ftvm.selectedFlight = nil
                 }
             }
@@ -70,6 +65,30 @@ struct ContentView: View {
             default:
                 print("\(newPhase) scene")
             }
+        }
+        .overlay(alignment: .bottom, content: {
+//            InputView()
+            if ftvm.selectedFlight == nil {
+                InputView()
+            }
+        })
+        .sheet(isPresented: $ftvm.isShowingBriefSheet, onDismiss: {
+            ftvm.selectedFlight = nil
+            ftvm.annotationSelected = false
+        }) {
+            ZStack {
+                if let flight = ftvm.selectedFlight {
+                    FlightInfoView(flight: flight)
+//                        .background(Color(red: 0.24705882352941178, green: 0.25882352941176473, blue: 0.2784313725490196, opacity: 0.75))
+                }
+            }
+            .ignoresSafeArea()
+            .highPriorityGesture(DragGesture(minimumDistance: 0, coordinateSpace: .local))
+            .interactiveDismissDisabled()
+//            .background(Color(red: 0.24705882352941178, green: 0.25882352941176473, blue: 0.2784313725490196, opacity: 0.75))
+            .presentationBackground(Color(red: 0.24705882352941178, green: 0.25882352941176473, blue: 0.2784313725490196, opacity: 0.75))
+            .presentationDetents([.height(169)])
+            .presentationBackgroundInteraction(.enabled(upThrough: .height(169)))
         }
     }
 
