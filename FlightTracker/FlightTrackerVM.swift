@@ -20,6 +20,7 @@ class FlightTrackerVM {
     var updateNr = 1
     var annotationSelected = false
     var isShowingBriefSheet = false
+    var isShowingDetailedSheet = false
 
     init() {
         Task {
@@ -76,7 +77,7 @@ class FlightTrackerVM {
             DispatchQueue.main.async {
                 self.selectedFlight = flight
             }
-            print("Flight info: \(flight)")
+//            print("Flight info: \(flight)")
         } catch {
             DispatchQueue.main.async {
                 self.errorMessage = error.localizedDescription
