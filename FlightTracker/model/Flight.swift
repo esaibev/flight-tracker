@@ -14,6 +14,7 @@ struct Flight: Codable, Equatable {
     let flightIcao: String?
     let depIata: String?
     let depCity: String?
+    let depActual: Double?
     let arrIata: String?
     let arrCity: String?
     let status: String?
@@ -37,6 +38,7 @@ struct Flight: Codable, Equatable {
         case flightIcao = "flight_icao"
         case depIata = "dep_iata"
         case depCity = "dep_city"
+        case depActual = "dep_actual_ts"
         case arrIata = "arr_iata"
         case arrCity = "arr_city"
         case status

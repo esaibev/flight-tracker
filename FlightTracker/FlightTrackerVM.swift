@@ -125,10 +125,10 @@ class FlightTrackerVM {
         Task {
             await self.getFlights()
         }
-        updateTimer = Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true) { [weak self] _ in
+        updateTimer = Timer.scheduledTimer(withTimeInterval: 60.0, repeats: true) { [weak self] _ in
             guard let self = self else { return }
             Task {
-                print("Update \(self.updateNr)")
+//                print("Update \(self.updateNr)")
                 self.updateNr += 1
                 await self.getFlights()
                 if let flightIata = self.selectedFlight?.flightIata {
@@ -154,6 +154,52 @@ class FlightTrackerVM {
             self.camera = MapCameraPosition.region(MKCoordinateRegion(center: centerCoordinate, latitudinalMeters: 200000, longitudinalMeters: 200000))
         }
     }
+
+    func backgroundColor(for status: String) -> Color {
+        switch status {
+        case "scheduled":
+            return Color(.black)
+        case "landed":
+            return Color.blue
+        default:
+            return Color.greenBg
+        }
+    }
+
+    // Not used
+    func getElapsedTime(for flight: Flight?) -> String {
+        if let depActual = flight?.depActual {
+            let currentTime = Date()
+            let departureTime = Date(timeIntervalSince1970: depActual)
+
+            let elapsed = currentTime.timeIntervalSince(departureTime)
+            let hours = Int(elapsed / 3600)
+            let minutes = Int((elapsed.truncatingRemainder(dividingBy: 3600)) / 60)
+
+            if hours > 0 {
+                return "\(hours)h \(minutes)m ago"
+            } else {
+                return "\(minutes)m ago"
+            }
+        } else {
+            return "N/A ago"
+        }
+    }
+
+    func getElapsedTime(for depActual: Double) -> String {
+        let currentTime = Date()
+        let departureTime = Date(timeIntervalSince1970: depActual)
+
+        let elapsed = currentTime.timeIntervalSince(departureTime)
+        let hours = Int(elapsed / 3600)
+        let minutes = Int((elapsed.truncatingRemainder(dividingBy: 3600)) / 60)
+
+        if hours > 0 {
+            return "\(hours)h \(minutes)m ago"
+        } else {
+            return "\(minutes)m ago"
+        }
+    }
 }
 
 extension CLLocationCoordinate2D {
@@ -167,5 +213,11 @@ extension MKCoordinateRegion {
         return .init(center: .startingLocation,
                      latitudinalMeters: 400000,
                      longitudinalMeters: 400000)
+    }
+}
+
+extension String {
+    func capitalizeFirstLetter() -> String {
+        return prefix(1).capitalized + dropFirst()
     }
 }

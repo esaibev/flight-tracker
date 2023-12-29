@@ -1,5 +1,5 @@
 //
-//  FlightInfoView.swift
+//  BriefFlightView.swift
 //  FlightTracker
 //
 //  Created by Esaias Bevegård on 2023-12-20.
@@ -7,9 +7,10 @@
 
 import SwiftUI
 
-struct FlightInfoView: View {
-    var flight: Flight?
+struct BriefFlightView: View {
+    @Environment(FlightTrackerVM.self) var ftvm
     @Environment(\.colorScheme) var colorScheme
+    var flight: Flight?
 
     var body: some View {
         VStack(spacing: 4) {
@@ -52,12 +53,12 @@ struct FlightInfoView: View {
 
                 VStack(alignment: .trailing) {
                     if let status = flight?.status {
-                        Text("\(status.capitalizingFirstLetter())")
+                        Text("\(status.capitalizeFirstLetter())")
                             .font(.system(size: 12))
                             .foregroundStyle(.white)
                             .padding(.horizontal, 4)
                             .padding(.vertical, 2)
-                            .background(backgroundColor(for: status))
+                            .background(ftvm.backgroundColor(for: status))
                             .clipShape(RoundedRectangle(cornerRadius: 2))
                     }
                     Group {
@@ -218,32 +219,26 @@ struct FlightInfoView: View {
             .fixedSize(horizontal: false, vertical: true)
             .padding(.horizontal, 4)
         }
-        .background(Color(red: 0.24705882352941178, green: 0.25882352941176473, blue: 0.2784313725490196, opacity: 0.75))
+        .overlay {
+            CustomDragIndicator()
+                .frame(height: 169, alignment: .topLeading)
+                .padding(.top, -22)
+        }
+//        .background(Color(red: 0.24705882352941178, green: 0.25882352941176473, blue: 0.2784313725490196, opacity: 0.75))
     }
 }
 
-private func backgroundColor(for status: String) -> Color {
-    switch status {
-    case "scheduled":
-        return Color(.black)
-    case "landed":
-        return Color.blue
-    default:
-        return Color.greenBg
-    }
-}
-
-extension String {
-    func capitalizingFirstLetter() -> String {
-        return prefix(1).capitalized + dropFirst()
-    }
-
-    mutating func capitalizeFirstLetter() {
-        self = self.capitalizingFirstLetter()
+private struct CustomDragIndicator: View {
+    var body: some View {
+        RoundedRectangle(cornerRadius: 3)
+            .frame(width: 36, height: 5)
+            .foregroundColor(Color(red: 0.5176470588235295, green: 0.5294117647058824, blue: 0.5607843137254902))
+            .padding()
     }
 }
 
 #Preview {
-    FlightInfoView(flight: Flight(aircraftIcao: "B788", airlineName: "American Airlines", flightIata: "AA719", flightIcao: "AAL719", depIata: "FCO", depCity: "Rome", arrIata: "PHL", arrCity: "Philadelphia", status: "scheduled", arrDelayed: 32, icao24: "AC0196", regNr: "N873BB", lat: 43.34963, lon: 8.27349, alt: 10972, dir: 292, speed: 820, vSpeed: -0.3, built: 2020, percent: 15, eta: 499))
+    BriefFlightView(flight: Flight(aircraftIcao: "B788", airlineName: "American Airlines", flightIata: "AA719", flightIcao: "AAL719", depIata: "FCO", depCity: "Rome", depActual: 1703855691, arrIata: "PHL", arrCity: "Philadelphia", status: "scheduled", arrDelayed: 32, icao24: "AC0196", regNr: "N873BB", lat: 43.34963, lon: 8.27349, alt: 10972, dir: 292, speed: 820, vSpeed: -0.3, built: 2020, percent: 15, eta: 499))
+        .environment(FlightTrackerVM())
         .preferredColorScheme(.light)
 }
