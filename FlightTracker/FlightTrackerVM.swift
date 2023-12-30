@@ -77,7 +77,7 @@ class FlightTrackerVM {
             DispatchQueue.main.async {
                 self.selectedFlight = flight
             }
-//            print("Flight info: \(flight)")
+            print("Flight info: \(flight)")
         } catch {
             DispatchQueue.main.async {
                 self.errorMessage = error.localizedDescription
@@ -125,12 +125,14 @@ class FlightTrackerVM {
         Task {
             await self.getFlights()
         }
-        updateTimer = Timer.scheduledTimer(withTimeInterval: 60.0, repeats: true) { [weak self] _ in
+        updateTimer = Timer.scheduledTimer(withTimeInterval: 20.0, repeats: true) { [weak self] _ in
             guard let self = self else { return }
             Task {
-//                print("Update \(self.updateNr)")
+                print("Update \(self.updateNr)")
                 self.updateNr += 1
-                await self.getFlights()
+                if !self.isShowingDetailedSheet {
+                    await self.getFlights()
+                }
                 if let flightIata = self.selectedFlight?.flightIata {
                     await self.getFlightInfo(flightIata)
                 }
@@ -163,41 +165,6 @@ class FlightTrackerVM {
             return Color.blue
         default:
             return Color.greenBg
-        }
-    }
-
-    // Not used
-    func getElapsedTime(for flight: Flight?) -> String {
-        if let depActual = flight?.depActual {
-            let currentTime = Date()
-            let departureTime = Date(timeIntervalSince1970: depActual)
-
-            let elapsed = currentTime.timeIntervalSince(departureTime)
-            let hours = Int(elapsed / 3600)
-            let minutes = Int((elapsed.truncatingRemainder(dividingBy: 3600)) / 60)
-
-            if hours > 0 {
-                return "\(hours)h \(minutes)m ago"
-            } else {
-                return "\(minutes)m ago"
-            }
-        } else {
-            return "N/A ago"
-        }
-    }
-
-    func getElapsedTime(for depActual: Double) -> String {
-        let currentTime = Date()
-        let departureTime = Date(timeIntervalSince1970: depActual)
-
-        let elapsed = currentTime.timeIntervalSince(departureTime)
-        let hours = Int(elapsed / 3600)
-        let minutes = Int((elapsed.truncatingRemainder(dividingBy: 3600)) / 60)
-
-        if hours > 0 {
-            return "\(hours)h \(minutes)m ago"
-        } else {
-            return "\(minutes)m ago"
         }
     }
 }

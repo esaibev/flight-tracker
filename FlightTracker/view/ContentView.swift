@@ -86,14 +86,6 @@ struct ContentView: View {
                                     showDetailedView = true
                                 }
                             }
-
-                        //                    AnotherView(showDetailedView: $showDetailedView)
-                        //                        .offset(y: showDetailedView ? 0 : geometry.size.height)
-                        //                        .onAppear {
-                        //                            withAnimation(.spring(duration: 0.3)) {
-                        //                                showDetailedView = true
-                        //                            }
-                        //                        }
                     }
                 }
             }
@@ -115,33 +107,6 @@ struct ContentView: View {
                 .presentationBackgroundInteraction(.enabled(upThrough: .height(169)))
                 .presentationBackground(Color(red: 0.24705882352941178, green: 0.25882352941176473, blue: 0.2784313725490196, opacity: 0.75))
             }
-        }
-    }
-
-    struct AnotherView: View {
-        @Environment(FlightTrackerVM.self) var ftvm
-        @Environment(\.presentationMode) var presentationMode
-        @Binding var showDetailedView: Bool
-
-        var body: some View {
-            VStack {
-                HStack {
-                    Button("Cancel") {
-                        self.presentationMode.wrappedValue.dismiss()
-                        self.showDetailedView = false
-                        ftvm.isShowingDetailedSheet = false
-                        ftvm.isShowingBriefSheet = true
-                    }.padding()
-
-                    Spacer()
-                }
-                Spacer()
-                Text("Second View")
-                    .bold()
-                    .font(.largeTitle)
-                Spacer()
-            }
-            .background(.red)
         }
     }
 
