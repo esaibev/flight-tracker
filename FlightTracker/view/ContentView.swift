@@ -102,6 +102,7 @@ struct ContentView: View {
                             })
                     }
                 }
+                .interactiveDismissDisabled()
                 .presentationDragIndicator(.hidden)
                 .presentationDetents([.height(169)])
                 .presentationBackgroundInteraction(.enabled(upThrough: .height(169)))

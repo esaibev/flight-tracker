@@ -272,26 +272,7 @@ struct DetailedFlightView: View {
                                     .font(.system(size: 13))
                                     .foregroundStyle(.darkGrayText)
                                 
-                                if let country = flight?.depCountry {
-                                    AsyncImage(url: URL(string: "https://flagsapi.com/\(country)/flat/64.png")) { phase in
-                                        switch phase {
-                                        case .empty:
-                                            ProgressView()
-                                                .frame(width: 20, height: 20)
-                                        case .success(let image):
-                                            image.resizable()
-                                                .frame(width: 20, height: 20)
-                                        case .failure:
-                                            Text("\(country)")
-                                                .font(.system(size: 16))
-                                        @unknown default:
-                                            Text("")
-                                        }
-                                    }
-                                } else {
-                                    Text("N/A")
-                                        .font(.system(size: 16))
-                                }
+                                FlagImageView(country: flight?.depCountry)
                             }
                         }
                     }
@@ -336,27 +317,8 @@ struct DetailedFlightView: View {
                                 Text("Country")
                                     .font(.system(size: 13))
                                     .foregroundStyle(.darkGrayText)
-                                               
-                                if let country = flight?.arrCountry {
-                                    AsyncImage(url: URL(string: "https://flagsapi.com/\(country)/flat/64.png")) { phase in
-                                        switch phase {
-                                        case .empty:
-                                            ProgressView()
-                                                .frame(width: 20, height: 20)
-                                        case .success(let image):
-                                            image.resizable()
-                                                .frame(width: 20, height: 20)
-                                        case .failure:
-                                            Text("\(country)")
-                                                .font(.system(size: 16))
-                                        @unknown default:
-                                            Text("")
-                                        }
-                                    }
-                                } else {
-                                    Text("N/A")
-                                        .font(.system(size: 16))
-                                }
+                                
+                                FlagImageView(country: flight?.arrCountry)
                             }
                         }
                     }
@@ -365,11 +327,300 @@ struct DetailedFlightView: View {
                     .padding(.horizontal, 10)
                     .background(.white)
                     .clipShape(RoundedRectangle(cornerRadius: 4))
+                    
+                    // Position info divider
+                    SectionDivider(systemName: "mappin.and.ellipse", title: "POSITION INFO")
+                    
+                    // MARK: Fifth white section
+
+                    HStack(spacing: 4) {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("ALT")
+                                .boxTitleStyle()
+                            
+                            Group {
+                                if let alt = flight?.alt {
+                                    Text("\(alt) ") + Text("km")
+                                        .font(.system(size: 12))
+                                        .foregroundColor(.darkGrayText)
+                                } else {
+                                    Text("N/A ") + Text("km")
+                                        .font(.system(size: 12))
+                                        .foregroundColor(.darkGrayText)
+                                }
+                            }
+                            .font(.system(size: 16))
+                        }
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+                        .padding(.vertical, 8)
+                        .padding(.horizontal, 10)
+                        .background(.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 4))
+                        
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("LAT")
+                                .boxTitleStyle()
+                            
+                            Group {
+                                if let lat = flight?.lat {
+                                    Text("\(lat, specifier: "%.3f")")
+                                } else {
+                                    Text("N/A")
+                                }
+                            }
+                            .font(.system(size: 16))
+                        }
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+                        .padding(.vertical, 8)
+                        .padding(.horizontal, 10)
+                        .background(.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 4))
+                        
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("LON")
+                                .boxTitleStyle()
+                            
+                            Group {
+                                if let lon = flight?.lon {
+                                    Text("\(lon, specifier: "%.3f")")
+                                } else {
+                                    Text("N/A")
+                                }
+                            }
+                            .font(.system(size: 16))
+                        }
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+                        .padding(.vertical, 8)
+                        .padding(.horizontal, 10)
+                        .background(.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 4))
+                    }
+                    .fixedSize(horizontal: false, vertical: true)
+                    
+                    // MARK: Sixth white section
+                    
+                    HStack(spacing: 4) {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("SPEED")
+                                .boxTitleStyle()
+                            
+                            Group {
+                                if let speed = flight?.speed {
+                                    Text("\(speed) ") + Text("km/h")
+                                        .font(.system(size: 12))
+                                        .foregroundColor(.darkGrayText)
+                                } else {
+                                    Text("N/A ") + Text("km/h")
+                                        .font(.system(size: 12))
+                                        .foregroundColor(.darkGrayText)
+                                }
+                            }
+                            .font(.system(size: 16))
+                        }
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+                        .padding(.vertical, 8)
+                        .padding(.horizontal, 10)
+                        .background(.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 4))
+                        
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("V.SPEED")
+                                .boxTitleStyle()
+                            
+                            Group {
+                                if let vSpeed = self.flight?.vSpeed {
+                                    if vSpeed == 0 {
+                                        Text("\(vSpeed, specifier: "%.0f") ") + Text("km/h")
+                                            .font(.system(size: 12))
+                                            .foregroundColor(.darkGrayText)
+                                    } else {
+                                        Text("\(vSpeed, specifier: "%.1f") ") + Text("km/h")
+                                            .font(.system(size: 12))
+                                            .foregroundColor(.darkGrayText)
+                                    }
+                                } else {
+                                    Text("N/A ") + Text("km/h")
+                                        .font(.system(size: 12))
+                                        .foregroundColor(.darkGrayText)
+                                }
+                            }
+                            .font(.system(size: 16))
+                        }
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+                        .padding(.vertical, 8)
+                        .padding(.horizontal, 10)
+                        .background(.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 4))
+                        
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("HEADING")
+                                .boxTitleStyle()
+                            
+                            Group {
+                                if let dir = flight?.dir {
+                                    Text("\(dir, specifier: "%.0f")°")
+                                } else {
+                                    Text("N/A°")
+                                }
+                            }
+                            .font(.system(size: 16))
+                        }
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+                        .padding(.vertical, 8)
+                        .padding(.horizontal, 10)
+                        .background(.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 4))
+                    }
+                    .fixedSize(horizontal: false, vertical: true)
+                    
+                    // Aircraft info divider
+                    SectionDivider(systemName: "airplane", title: "AIRCRAFT INFO")
+                    
+                    // MARK: Seventh white section
+                    
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("MODEL")
+                            .boxTitleStyle()
+                        
+                        Text("\(flight?.model ?? "N/A")")
+                            .font(.system(size: 16))
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+                    .padding(.vertical, 8)
+                    .padding(.horizontal, 10)
+                    .background(.white)
+                    .clipShape(RoundedRectangle(cornerRadius: 4))
+                    
+                    // MARK: Eighth white section
+                    
+                    HStack(spacing: 4) {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("REG.NR")
+                                .boxTitleStyle()
+                            
+                            Text("\(flight?.regNr ?? "N/A")")
+                                .font(.system(size: 16))
+                        }
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+                        .padding(.vertical, 8)
+                        .padding(.horizontal, 10)
+                        .background(.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 4))
+                                            
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("BUILT")
+                                .boxTitleStyle()
+                            
+                            Group {
+                                if let built = flight?.built {
+                                    Text(verbatim: "\(built)")
+                                } else {
+                                    Text("N/A")
+                                }
+                            }
+                            .font(.system(size: 16))
+                        }
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+                        .padding(.vertical, 8)
+                        .padding(.horizontal, 10)
+                        .background(.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 4))
+                                            
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("REG.ORIGIN")
+                                .boxTitleStyle()
+                            
+                            FlagImageView(country: flight?.regCountry)
+                        }
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+                        .padding(.vertical, 8)
+                        .padding(.horizontal, 10)
+                        .background(.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 4))
+                    }
+                    .fixedSize(horizontal: false, vertical: true)
+                    
+                    // MARK: Ninth white section
+                    
+                    HStack(spacing: 4) {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("ENGINE TYPE")
+                                .boxTitleStyle()
+                            
+                            Group {
+                                if let engineType = flight?.engineType {
+                                    Text("\(engineType.capitalizeFirstLetter())")
+                                } else {
+                                    Text("N/A")
+                                }
+                            }
+                            .font(.system(size: 16))
+                        }
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+                        .padding(.vertical, 8)
+                        .padding(.horizontal, 10)
+                        .background(.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 4))
+                                            
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("ENGINES")
+                                .boxTitleStyle()
+                            
+                            Text("\(flight?.engineCount ?? "N/A")")
+                                .font(.system(size: 16))
+                        }
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+                        .padding(.vertical, 8)
+                        .padding(.horizontal, 10)
+                        .background(.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 4))
+                        
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("ICAO24")
+                                .boxTitleStyle()
+                            
+                            Text("\(flight?.icao24 ?? "N/A")")
+                                .font(.system(size: 16))
+                        }
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+                        .padding(.vertical, 8)
+                        .padding(.horizontal, 10)
+                        .background(.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 4))
+                    }
+                    .fixedSize(horizontal: false, vertical: true)
                 }
                 .padding(4)
             }
             .frame(maxWidth: /*@START_MENU_TOKEN@*/ .infinity/*@END_MENU_TOKEN@*/, maxHeight: .infinity)
             .background(Color.detailedFlightBg)
+        }
+    }
+    
+    private struct FlagImageView: View {
+        var country: String?
+        
+        var body: some View {
+            if let country = country, !country.isEmpty {
+                AsyncImage(url: URL(string: "https://flagsapi.com/\(country)/flat/64.png")) { phase in
+                    switch phase {
+                    case .empty:
+                        ProgressView()
+                            .frame(width: 20, height: 20)
+                    case .success(let image):
+                        image.resizable()
+                            .frame(width: 20, height: 20)
+                    case .failure:
+                        Text("\(country)")
+                            .font(.system(size: 16))
+                    @unknown default:
+                        Text("")
+                    }
+                }
+            } else {
+                Text("N/A")
+                    .font(.system(size: 16))
+            }
         }
     }
 
@@ -447,23 +698,7 @@ struct DetailedFlightView: View {
 }
 
 #Preview {
-//    DetailedFlightView(flight: Flight(aircraftIcao: "B788", airlineName: "American Airlines", flightIata: "AA719", flightIcao: "AAL719", depIata: "FCO", depCity: "Rome", depActualTs: 1703864109, arrIata: "PHL", arrCity: "Philadelphia", status: "scheduled", arrDelayed: 32, icao24: "AC0196", regNr: "N873BB", lat: 43.34963, lon: 8.27349, alt: 10972, dir: 292, speed: 820, vSpeed: -0.3, built: 2020, percent: 15, eta: 499), showDetailedView: .constant(true))
-//        .environment(FlightTrackerVM())
-//        .preferredColorScheme(.light)
-
-//        DetailedFlightView(flight: Flight(aircraftIcao: "B788", airlineName: "American Airlines", flightIata: "AA719", flightIcao: "AAL719", depIata: "FCO", depCity: "Rome", depActual: "2023-12-28 11:30", depActualTs: 1703864109, arrIata: "PHL", arrCity: "Philadelphia", status: "scheduled", arrDelayed: 32, icao24: "AC0196", regNr: "N873BB", lat: 43.34963, lon: 8.27349, alt: 10972, dir: 292, speed: 820, vSpeed: -0.3, built: 2020, percent: 15, eta: 499), showDetailedView: .constant(true))
-//            .environment(FlightTrackerVM())
-//            .preferredColorScheme(.light)
-
-//    DetailedFlightView(flight: Flight(aircraftIcao: "B788", airlineName: "American Airlines", flightIata: "AA719", flightIcao: "AAL719", depIata: "FCO", depCity: "Rome", depTime: "2023-12-20 13:20", depActual: "2023-12-20 13:07", depActualTs: 1703864109, arrIata: "PHL", arrCity: "Philadelphia", status: "scheduled", arrDelayed: nil, icao24: "AC0196", regNr: "N873BB", lat: 43.34963, lon: 8.27349, alt: 10972, dir: 292, speed: 820, vSpeed: -0.3, built: 2020, percent: 15, eta: 499), showDetailedView: .constant(true))
-//        .environment(FlightTrackerVM())
-//        .preferredColorScheme(.light)
-
-//        DetailedFlightView(flight: Flight(aircraftIcao: "B788", airlineName: "American Airlines", flightIata: "AA719", flightIcao: "AAL719", depIata: "FCO", depCity: "Rome", depTime: "2023-12-20 13:20", depActual: "2023-12-20 13:07", depActualTs: 1703864109, arrIata: "PHL", arrCity: "Philadelphia", status: "scheduled", arrTime: "2023-12-20 17:05", arrDelayed: nil, icao24: "AC0196", regNr: "N873BB", lat: 43.34963, lon: 8.27349, alt: 10972, dir: 292, speed: 820, vSpeed: -0.3, built: 2020, percent: 15, eta: 499), showDetailedView: .constant(true))
-//            .environment(FlightTrackerVM())
-//            .preferredColorScheme(.light)
-
-    DetailedFlightView(flight: Flight(aircraftIcao: "B788", airlineName: "American Airlines", flightIata: "AA719", flightIcao: "AAL719", depIata: "FCO", depCity: "Rome", depName: "Leonardo da Vinci-Fiumicino Airport", depCountry: "IT", depTime: "2023-12-20 13:20", depActual: "2023-12-20 13:07", depActualTs: 1703864109, depTerminal: "3", depGate: "E37", arrIata: "PHL", arrCity: "Philadelphia", arrName: "Philadelphia International Airport", arrCountry: "US", status: "en-route", arrTime: "2023-12-20 17:05", arrEstimated: "2023-12-20 16:16", arrDelayed: nil, arrTerminal: "A", arrGate: "22", arrBaggage: "CUST", icao24: "AC0196", regNr: "N873BB", lat: 43.34963, lon: 8.27349, alt: 10972, dir: 292, speed: 820, vSpeed: -0.3, built: 2020, percent: 15, eta: 499), showDetailedView: .constant(true))
+    DetailedFlightView(flight: Flight.sampleData, showDetailedView: .constant(true))
         .environment(FlightTrackerVM())
         .preferredColorScheme(.light)
 }

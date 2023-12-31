@@ -237,23 +237,7 @@ private struct CustomDragIndicator: View {
 }
 
 #Preview {
-//    BriefFlightView(flight: Flight(aircraftIcao: "B788", airlineName: "American Airlines", flightIata: "AA719", flightIcao: "AAL719", depIata: "FCO", depCity: "Rome", depActualTs: 1703864109, arrIata: "PHL", arrCity: "Philadelphia", status: "scheduled", arrDelayed: 32, icao24: "AC0196", regNr: "N873BB", lat: 43.34963, lon: 8.27349, alt: 10972, dir: 292, speed: 820, vSpeed: -0.3, built: 2020, percent: 15, eta: 499))
-//        .environment(FlightTrackerVM())
-//        .preferredColorScheme(.light)
-
-//        BriefFlightView(flight: Flight(aircraftIcao: "B788", airlineName: "American Airlines", flightIata: "AA719", flightIcao: "AAL719", depIata: "FCO", depCity: "Rome", depActual: "2023-12-28 11:30", depActualTs: 1703864109, arrIata: "PHL", arrCity: "Philadelphia", status: "scheduled", arrDelayed: 32, icao24: "AC0196", regNr: "N873BB", lat: 43.34963, lon: 8.27349, alt: 10972, dir: 292, speed: 820, vSpeed: -0.3, built: 2020, percent: 15, eta: 499))
-//            .environment(FlightTrackerVM())
-//            .preferredColorScheme(.light)
-//
-//    BriefFlightView(flight: Flight(aircraftIcao: "B788", airlineName: "American Airlines", flightIata: "AA719", flightIcao: "AAL719", depIata: "FCO", depCity: "Rome", depTime: "2023-12-20 13:20", depActual: "2023-12-20 13:07", depActualTs: 1703864109, arrIata: "PHL", arrCity: "Philadelphia", status: "scheduled", arrDelayed: nil, icao24: "AC0196", regNr: "N873BB", lat: 43.34963, lon: 8.27349, alt: 10972, dir: 292, speed: 820, vSpeed: -0.3, built: 2020, percent: 15, eta: 499))
-//        .environment(FlightTrackerVM())
-//        .preferredColorScheme(.light)
-
-//        BriefFlightView(flight: Flight(aircraftIcao: "B788", airlineName: "American Airlines", flightIata: "AA719", flightIcao: "AAL719", depIata: "FCO", depCity: "Rome", depTime: "2023-12-20 13:20", depActual: "2023-12-20 13:07", depActualTs: 1703864109, arrIata: "PHL", arrCity: "Philadelphia", status: "scheduled", arrTime: "2023-12-20 17:05", arrDelayed: nil, icao24: "AC0196", regNr: "N873BB", lat: 43.34963, lon: 8.27349, alt: 10972, dir: 292, speed: 820, vSpeed: -0.3, built: 2020, percent: 15, eta: 499))
-//            .environment(FlightTrackerVM())
-//            .preferredColorScheme(.light)
-
-    BriefFlightView(flight: Flight(aircraftIcao: "B788", airlineName: "American Airlines", flightIata: "AA719", flightIcao: "AAL719", depIata: "FCO", depCity: "Rome", depName: "Leonardo da Vinci-Fiumicino Airport", depCountry: "IT", depTime: "2023-12-20 13:20", depActual: "2023-12-20 13:07", depActualTs: 1703864109, depTerminal: "3", depGate: "E37", arrIata: "PHL", arrCity: "Philadelphia", arrName: "Philadelphia International Airport", arrCountry: "US", status: "en-route", arrTime: "2023-12-20 17:05", arrEstimated: "2023-12-20 16:16", arrDelayed: nil, arrTerminal: "A", arrGate: "22", arrBaggage: "CUST", icao24: "AC0196", regNr: "N873BB", lat: 43.34963, lon: 8.27349, alt: 10972, dir: 292, speed: 820, vSpeed: -0.3, built: 2020, percent: 15, eta: 499))
+    BriefFlightView(flight: Flight.sampleData)
         .environment(FlightTrackerVM())
         .preferredColorScheme(.light)
 }

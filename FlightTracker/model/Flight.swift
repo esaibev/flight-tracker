@@ -34,12 +34,16 @@ struct Flight: Codable, Equatable {
     let arrBaggage: String?
     let icao24: String?
     let regNr: String?
+    let regCountry: String?
     let lat: Double?
     let lon: Double?
     let alt: Int?
     let dir: Double?
     let speed: Int?
     let vSpeed: Double?
+    let model: String?
+    let engineType: String?
+    let engineCount: String?
     let built: Int?
     let percent: Double?
     let eta: Int?
@@ -71,14 +75,62 @@ struct Flight: Codable, Equatable {
         case arrBaggage = "arr_baggage"
         case icao24 = "hex"
         case regNr = "reg_number"
+        case regCountry = "flag"
         case lat
         case lon = "lng"
         case alt
         case dir
         case speed
         case vSpeed = "v_speed"
+        case model
+        case engineType = "engine"
+        case engineCount = "engines"
         case built
         case percent
         case eta
+    }
+
+    static var sampleData: Flight {
+        Flight(
+            aircraftIcao: "B788",
+            airlineName: "American Airlines",
+            flightIata: "AA719",
+            flightIcao: "AAL719",
+            depIata: "FCO",
+            depCity: "Rome",
+            depName: "Leonardo da Vinci-Fiumicino Airport",
+            depCountry: "IT",
+            depTime: "2023-12-20 13:20",
+            depActual: "2023-12-20 13:07",
+            depActualTs: 1703864109,
+            depTerminal: "3",
+            depGate: "E37",
+            arrIata: "PHL",
+            arrCity: "Philadelphia",
+            arrName: "Philadelphia International Airport",
+            arrCountry: "US",
+            status: "en-route",
+            arrTime: "2023-12-20 17:05",
+            arrEstimated: "2023-12-20 16:16",
+            arrDelayed: nil,
+            arrTerminal: "A",
+            arrGate: "22",
+            arrBaggage: "CUST",
+            icao24: "AC0196",
+            regNr: "N873BB",
+            regCountry: "US",
+            lat: 43.34963,
+            lon: 8.27349,
+            alt: 10972,
+            dir: 292,
+            speed: 820,
+            vSpeed: -0.3,
+            model: "Boeing 787-8 pax",
+            engineType: "jet",
+            engineCount: "2",
+            built: 2020,
+            percent: 15,
+            eta: 499
+        )
     }
 }

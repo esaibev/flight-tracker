@@ -14,10 +14,7 @@ struct FlightNetworkService {
     }
 
     static func getFlight(_ flightIata: String) async throws -> Flight {
-        // Get data from JSON to save API calls
         return try getFlightFromJSON()
-
-        // Standard way of getting data
 //        return try await getFlightFromURL(flightIata)
     }
 
