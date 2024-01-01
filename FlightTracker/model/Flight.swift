@@ -18,6 +18,7 @@ struct Flight: Codable, Equatable {
     let depCountry: String?
     let depTime: String?
     let depActual: String?
+    let depActualUTC: String?
     let depActualTs: Double?
     let depTerminal: String?
     let depGate: String?
@@ -28,6 +29,7 @@ struct Flight: Codable, Equatable {
     let status: String?
     let arrTime: String?
     let arrEstimated: String?
+    let arrEstimatedUTC: String?
     let arrDelayed: Int?
     let arrTerminal: String?
     let arrGate: String?
@@ -60,6 +62,7 @@ struct Flight: Codable, Equatable {
         case depTime = "dep_time"
         case depActual = "dep_actual"
         case depActualTs = "dep_actual_ts"
+        case depActualUTC = "dep_actual_utc"
         case depTerminal = "dep_terminal"
         case depGate = "dep_gate"
         case arrIata = "arr_iata"
@@ -69,6 +72,7 @@ struct Flight: Codable, Equatable {
         case status
         case arrTime = "arr_time"
         case arrEstimated = "arr_estimated"
+        case arrEstimatedUTC = "arr_estimated_utc"
         case arrDelayed = "arr_delayed"
         case arrTerminal = "arr_terminal"
         case arrGate = "arr_gate"
@@ -102,6 +106,7 @@ struct Flight: Codable, Equatable {
             depCountry: "IT",
             depTime: "2023-12-20 13:20",
             depActual: "2023-12-20 13:07",
+            depActualUTC: "2023-12-20 12:07",
             depActualTs: 1703864109,
             depTerminal: "3",
             depGate: "E37",
@@ -112,6 +117,7 @@ struct Flight: Codable, Equatable {
             status: "en-route",
             arrTime: "2023-12-20 17:05",
             arrEstimated: "2023-12-20 16:16",
+            arrEstimatedUTC: "2023-12-20 21:16",
             arrDelayed: nil,
             arrTerminal: "A",
             arrGate: "22",

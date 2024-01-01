@@ -22,11 +22,11 @@ class FlightTrackerVM {
     var isShowingBriefSheet = false
     var isShowingDetailedSheet = false
 
-    init() {
-        Task {
-            await getFlight("")
-        }
-    }
+//    init() {
+//        Task {
+//            await getFlight("")
+//        }
+//    }
 
     @ObservationIgnored private var zoomLevel = 5
     @ObservationIgnored private var updateTimer: Timer?
@@ -77,7 +77,7 @@ class FlightTrackerVM {
             DispatchQueue.main.async {
                 self.selectedFlight = flight
             }
-            print("Flight info: \(flight)")
+//            print("Flight info: \(flight)")
         } catch {
             DispatchQueue.main.async {
                 self.errorMessage = error.localizedDescription
@@ -128,7 +128,7 @@ class FlightTrackerVM {
         updateTimer = Timer.scheduledTimer(withTimeInterval: 20.0, repeats: true) { [weak self] _ in
             guard let self = self else { return }
             Task {
-                print("Update \(self.updateNr)")
+//                print("Update \(self.updateNr)")
                 self.updateNr += 1
                 if !self.isShowingDetailedSheet {
                     await self.getFlights()

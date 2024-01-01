@@ -199,9 +199,16 @@ struct DetailedFlightView: View {
                             Text("DEPARTURE")
                                 .boxTitleStyle()
                             
-                            Text(formatTime(flight?.depActual))
-                                .font(.system(size: 20))
-                                .fontWeight(.medium)
+                            HStack(spacing: 4) {
+                                Text(formatTime(flight?.depActual))
+                                    .font(.system(size: 20))
+                                    .fontWeight(.medium)
+                                
+                                Text(timezoneOffset(localTimeString: flight?.depActual, utcTimeString: flight?.depActualUTC))
+                                    .font(.system(size: 12))
+                                    .foregroundStyle(.darkGrayText)
+                                    .fontWeight(.medium)
+                            }
                             
                             Text("Scheduled \(formatTime(flight?.depTime))")
                                 .font(.system(size: 12))
@@ -225,6 +232,11 @@ struct DetailedFlightView: View {
                                 
                                 Text(formatTime(flight?.arrEstimated))
                                     .font(.system(size: 20))
+                                    .fontWeight(.medium)
+                                
+                                Text(timezoneOffset(localTimeString: flight?.arrEstimated, utcTimeString: flight?.arrEstimatedUTC))
+                                    .font(.system(size: 12))
+                                    .foregroundStyle(.darkGrayText)
                                     .fontWeight(.medium)
                             }
                             
@@ -665,24 +677,58 @@ struct DetailedFlightView: View {
 
         return "N/A"
     }
+    
+    private func timezoneOffset(localTimeString: String?, utcTimeString: String?) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
+        dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+        
+        guard let localTimeStr = localTimeString,
+              let utcTimeStr = utcTimeString,
+              let localTime = dateFormatter.date(from: localTimeStr),
+              let utcTime = dateFormatter.date(from: utcTimeStr)
+        else {
+            return "N/A"
+        }
+
+        let timeDifference = Calendar.current.dateComponents([.hour], from: utcTime, to: localTime).hour ?? 0
+        if timeDifference > 0 {
+            return "(UTC+\(timeDifference))"
+        } else if timeDifference < 0 {
+            return "(UTC\(timeDifference))"
+        }
+        return "(UTC)"
+    }
 
     private var arrivalCircleColor: Color {
         if let arrDelayed = flight?.arrDelayed, arrDelayed > 0 {
-            return .yellow
+            if arrDelayed >= 60 {
+                return .red
+            } else {
+                return .yellow
+            }
         }
-
-        if flight?.arrEstimated == nil || flight?.arrTime == nil {
-            return .greenBg
-        }
-
+        
         if let arrEstimatedString = flight?.arrEstimated,
            let arrTimeString = flight?.arrTime,
            let arrEstimatedDate = parseDate(arrEstimatedString),
            let arrTimeDate = parseDate(arrTimeString)
         {
-            return arrEstimatedDate <= arrTimeDate ? .greenBg : .yellow
+            let difference = Calendar.current.dateComponents([.minute], from: arrTimeDate, to: arrEstimatedDate).minute ?? 0
+
+            if difference >= 60 {
+                // Return red if the estimated arrival time is 1 hour or more than the scheduled time
+                return .red
+            } else if difference <= 0 {
+                // Return green if the estimated arrival time is earlier than or equal to the scheduled time
+                return .greenBg
+            } else {
+                // Return yellow if the estimated arrival time is less than 1 hour late
+                return .yellow
+            }
         }
 
+        // Return green if there's no delay or estimated time information
         return .greenBg
     }
 
