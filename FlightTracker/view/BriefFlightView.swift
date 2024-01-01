@@ -73,6 +73,7 @@ struct BriefFlightView: View {
                 }
             }
             .padding()
+            .padding(.top, 2)
             .background(Color.dark)
 
             // Light part
@@ -151,7 +152,7 @@ struct BriefFlightView: View {
                                 Text("ALT.")
                                     .foregroundStyle(.darkGrayText)
                                 if let alt = self.flight?.alt {
-                                    Text("\(alt) km")
+                                    Text("\(alt) m")
                                         .foregroundStyle(.black)
                                 } else {
                                     Text("N/A")
@@ -221,7 +222,7 @@ struct BriefFlightView: View {
         }
         .overlay {
             CustomDragIndicator()
-                .frame(height: 169, alignment: .topLeading)
+                .frame(height: 171, alignment: .topLeading)
                 .padding(.top, -22)
         }
     }

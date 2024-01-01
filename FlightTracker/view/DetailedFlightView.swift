@@ -276,7 +276,7 @@ struct DetailedFlightView: View {
                             }
                         }
                     }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+                    .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.vertical, 8)
                     .padding(.horizontal, 10)
                     .background(.white)
@@ -322,7 +322,7 @@ struct DetailedFlightView: View {
                             }
                         }
                     }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+                    .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.vertical, 8)
                     .padding(.horizontal, 10)
                     .background(.white)
@@ -340,11 +340,11 @@ struct DetailedFlightView: View {
                             
                             Group {
                                 if let alt = flight?.alt {
-                                    Text("\(alt) ") + Text("km")
+                                    Text("\(alt) ") + Text("m")
                                         .font(.system(size: 12))
                                         .foregroundColor(.darkGrayText)
                                 } else {
-                                    Text("N/A ") + Text("km")
+                                    Text("N/A ") + Text("m")
                                         .font(.system(size: 12))
                                         .foregroundColor(.darkGrayText)
                                 }
@@ -363,7 +363,7 @@ struct DetailedFlightView: View {
                             
                             Group {
                                 if let lat = flight?.lat {
-                                    Text("\(lat, specifier: "%.3f")")
+                                    Text(String(format: "%.3f", locale: Locale(identifier: "en_US"), lat))
                                 } else {
                                     Text("N/A")
                                 }
@@ -382,7 +382,7 @@ struct DetailedFlightView: View {
                             
                             Group {
                                 if let lon = flight?.lon {
-                                    Text("\(lon, specifier: "%.3f")")
+                                    Text(String(format: "%.3f", locale: Locale(identifier: "en_US"), lon))
                                 } else {
                                     Text("N/A")
                                 }
@@ -485,7 +485,7 @@ struct DetailedFlightView: View {
                         Text("\(flight?.model ?? "N/A")")
                             .font(.system(size: 16))
                     }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+                    .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.vertical, 8)
                     .padding(.horizontal, 10)
                     .background(.white)
