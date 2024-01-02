@@ -22,11 +22,11 @@ class FlightTrackerVM {
     var isShowingBriefSheet = false
     var isShowingDetailedSheet = false
 
-//    init() {
-//        Task {
-//            await getFlight("")
-//        }
-//    }
+    init() {
+        Task {
+            await getFlight("")
+        }
+    }
 
     @ObservationIgnored private var zoomLevel = 5
     @ObservationIgnored private var updateTimer: Timer?
@@ -166,6 +166,10 @@ class FlightTrackerVM {
         default:
             return Color.greenBg
         }
+    }
+
+    func getFlagImage(for country: String, completion: @escaping (Image?) -> Void) {
+        FlightNetworkService.getFlagImage(for: country, completion: completion)
     }
 }
 

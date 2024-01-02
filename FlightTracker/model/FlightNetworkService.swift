@@ -6,16 +6,17 @@
 //
 
 import Foundation
+import SwiftUI
 
 struct FlightNetworkService {
     static func getFlights(_ bbox: (swLat: Double, swLon: Double, neLat: Double, neLon: Double), _ zoomLevel: Int) async throws -> [Flight] {
 //        return try getFlightsFromJSON()
-        return try await getFlightsFromURL(bbox, zoomLevel)
+//        return try await getFlightsFromURL(bbox, zoomLevel)
     }
 
     static func getFlight(_ flightIata: String) async throws -> Flight {
-//        return try getFlightFromJSON()
-        return try await getFlightFromURL(flightIata)
+        return try getFlightFromJSON()
+//        return try await getFlightFromURL(flightIata)
     }
 
     private static func getFlightsFromURL(_ bbox: (swLat: Double, swLon: Double, neLat: Double, neLon: Double), _ zoomLevel: Int) async throws -> [Flight] {
@@ -50,6 +51,32 @@ struct FlightNetworkService {
         let decoder = JSONDecoder()
         let response = try decoder.decode(FlightResponse.self, from: data)
         return response.response
+    }
+
+    static func getFlagImage(for country: String, completion: @escaping (Image?) -> Void) {
+        let urlString = "https://flagsapi.com/\(country)/flat/64.png"
+
+        if let cachedImage = ImageCache.shared.image(for: urlString) {
+            completion(cachedImage)
+            return
+        }
+
+        guard let url = URL(string: urlString) else {
+            completion(nil)
+            return
+        }
+
+        URLSession.shared.dataTask(with: url) { data, _, _ in
+            DispatchQueue.main.async {
+                if let data = data, let uiImage = UIImage(data: data) {
+                    let image = Image(uiImage: uiImage)
+                    ImageCache.shared.setImage(image, for: urlString)
+                    completion(image)
+                } else {
+                    completion(nil)
+                }
+            }
+        }.resume()
     }
 
     // MARK: Functions that uses test data from JSON

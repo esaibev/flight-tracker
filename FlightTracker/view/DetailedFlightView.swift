@@ -30,6 +30,12 @@ struct DetailedFlightView: View {
 
     var flight: Flight?
     @Binding var showDetailedView: Bool
+    @State private var depCountryFlag: Image? = nil
+    @State private var isDepCountryFlagLoading = true
+    @State private var arrCountryFlag: Image? = nil
+    @State private var isArrCountryFlagLoading = true
+    @State private var regCountryFlag: Image? = nil
+    @State private var isRegCountryFlagLoading = true
 
     var body: some View {
         VStack(spacing: 0) {
@@ -284,7 +290,7 @@ struct DetailedFlightView: View {
                                     .font(.system(size: 13))
                                     .foregroundStyle(.darkGrayText)
                                 
-                                FlagImageView(country: flight?.depCountry)
+                                FlagImageView(image: depCountryFlag, isLoading: isDepCountryFlagLoading)
                             }
                         }
                     }
@@ -295,7 +301,7 @@ struct DetailedFlightView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 4))
                     
                     // MARK: Fourth white box
-
+                    
                     VStack(alignment: .leading, spacing: 8) {
                         Text("ARRIVAL")
                             .boxTitleStyle()
@@ -330,7 +336,7 @@ struct DetailedFlightView: View {
                                     .font(.system(size: 13))
                                     .foregroundStyle(.darkGrayText)
                                 
-                                FlagImageView(country: flight?.arrCountry)
+                                FlagImageView(image: arrCountryFlag, isLoading: isArrCountryFlagLoading)
                             }
                         }
                     }
@@ -344,7 +350,7 @@ struct DetailedFlightView: View {
                     SectionDivider(systemName: "mappin.and.ellipse", title: "POSITION INFO")
                     
                     // MARK: Fifth white section
-
+                    
                     HStack(spacing: 4) {
                         VStack(alignment: .leading, spacing: 4) {
                             Text("ALT")
@@ -518,7 +524,7 @@ struct DetailedFlightView: View {
                         .padding(.horizontal, 10)
                         .background(.white)
                         .clipShape(RoundedRectangle(cornerRadius: 4))
-                                            
+                        
                         VStack(alignment: .leading, spacing: 4) {
                             Text("BUILT")
                                 .boxTitleStyle()
@@ -537,12 +543,12 @@ struct DetailedFlightView: View {
                         .padding(.horizontal, 10)
                         .background(.white)
                         .clipShape(RoundedRectangle(cornerRadius: 4))
-                                            
+                        
                         VStack(alignment: .leading, spacing: 4) {
                             Text("REG.ORIGIN")
                                 .boxTitleStyle()
                             
-                            FlagImageView(country: flight?.regCountry)
+                            FlagImageView(image: regCountryFlag, isLoading: isRegCountryFlagLoading)
                         }
                         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
                         .padding(.vertical, 8)
@@ -573,7 +579,7 @@ struct DetailedFlightView: View {
                         .padding(.horizontal, 10)
                         .background(.white)
                         .clipShape(RoundedRectangle(cornerRadius: 4))
-                                            
+                        
                         VStack(alignment: .leading, spacing: 4) {
                             Text("ENGINES")
                                 .boxTitleStyle()
@@ -605,33 +611,54 @@ struct DetailedFlightView: View {
                 .padding(4)
             }
             .frame(maxWidth: /*@START_MENU_TOKEN@*/ .infinity/*@END_MENU_TOKEN@*/, maxHeight: .infinity)
-            .background(Color.detailedFlightBg)
+            .background(.detailedFlightBg)
+        }
+        .onAppear {
+            getFlagImages()
+        }
+    }
+    
+    private func getFlagImages() {
+        if let depCountry = flight?.depCountry {
+            ftvm.getFlagImage(for: depCountry) { image in
+                self.depCountryFlag = image
+                self.isDepCountryFlagLoading = false
+            }
+        } else {
+            isDepCountryFlagLoading = false
+        }
+        
+        if let arrCountry = flight?.arrCountry {
+            ftvm.getFlagImage(for: arrCountry) { image in
+                self.arrCountryFlag = image
+                self.isArrCountryFlagLoading = false
+            }
+        } else {
+            isArrCountryFlagLoading = false
+        }
+        
+        if let regCountry = flight?.regCountry {
+            ftvm.getFlagImage(for: regCountry) { image in
+                self.regCountryFlag = image
+                self.isRegCountryFlagLoading = false
+            }
+        } else {
+            isRegCountryFlagLoading = false
         }
     }
     
     private struct FlagImageView: View {
-        var country: String?
-        
+        var image: Image?
+        var isLoading: Bool
+
         var body: some View {
-            if let country = country, !country.isEmpty {
-                AsyncImage(url: URL(string: "https://flagsapi.com/\(country)/flat/64.png")) { phase in
-                    switch phase {
-                    case .empty:
-                        ProgressView()
-                            .frame(width: 20, height: 20)
-                    case .success(let image):
-                        image.resizable()
-                            .frame(width: 20, height: 20)
-                    case .failure:
-                        Text("\(country)")
-                            .font(.system(size: 16))
-                    @unknown default:
-                        Text("")
-                    }
-                }
+            if isLoading {
+                ProgressView()
+                    .frame(width: 20, height: 20)
+            } else if let image = image {
+                image.resizable().frame(width: 20, height: 20)
             } else {
-                Text("N/A")
-                    .font(.system(size: 16))
+                Text("N/A").font(.system(size: 16))
             }
         }
     }
@@ -677,12 +704,12 @@ struct DetailedFlightView: View {
 
         return "N/A"
     }
-    
+        
     private func timezoneOffset(localTimeString: String?, utcTimeString: String?) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
         dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
-        
+            
         guard let localTimeStr = localTimeString,
               let utcTimeStr = utcTimeString,
               let localTime = dateFormatter.date(from: localTimeStr),
@@ -708,7 +735,7 @@ struct DetailedFlightView: View {
                 return .yellow
             }
         }
-        
+            
         if let arrEstimatedString = flight?.arrEstimated,
            let arrTimeString = flight?.arrTime,
            let arrEstimatedDate = parseDate(arrEstimatedString),
@@ -742,7 +769,7 @@ struct DetailedFlightView: View {
         return dateFormatter.date(from: dateString)
     }
 }
-
+    
 #Preview {
     DetailedFlightView(flight: Flight.sampleData, showDetailedView: .constant(true))
         .environment(FlightTrackerVM())

@@ -13,6 +13,7 @@
 		6636717E2B2F826900FC6234 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6636717D2B2F826900FC6234 /* Assets.xcassets */; };
 		663671812B2F826900FC6234 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 663671802B2F826900FC6234 /* Preview Assets.xcassets */; };
 		6636718A2B2F84FE00FC6234 /* FlightTrackerVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 663671892B2F84FE00FC6234 /* FlightTrackerVM.swift */; };
+		663788242B44283D002C9E51 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 663788232B44283D002C9E51 /* ImageCache.swift */; };
 		66389C132B335EEA00B56CB1 /* BriefFlightView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66389C122B335EEA00B56CB1 /* BriefFlightView.swift */; };
 		66391EA12B3240CF00EDABB0 /* InputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66391EA02B3240CF00EDABB0 /* InputView.swift */; };
 		6680F8602B34382100E00862 /* FlightProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6680F85F2B34382100E00862 /* FlightProgressView.swift */; };
@@ -30,6 +31,7 @@
 		6636717D2B2F826900FC6234 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		663671802B2F826900FC6234 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		663671892B2F84FE00FC6234 /* FlightTrackerVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlightTrackerVM.swift; sourceTree = "<group>"; };
+		663788232B44283D002C9E51 /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
 		66389C122B335EEA00B56CB1 /* BriefFlightView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BriefFlightView.swift; sourceTree = "<group>"; };
 		66391EA02B3240CF00EDABB0 /* InputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputView.swift; sourceTree = "<group>"; };
 		6680F85F2B34382100E00862 /* FlightProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlightProgressView.swift; sourceTree = "<group>"; };
@@ -93,6 +95,7 @@
 			children = (
 				66A227A02B30646600C46E65 /* Flight.swift */,
 				66A227A22B30658D00C46E65 /* FlightNetworkService.swift */,
+				663788232B44283D002C9E51 /* ImageCache.swift */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -190,6 +193,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				663788242B44283D002C9E51 /* ImageCache.swift in Sources */,
 				66A227A32B30658D00C46E65 /* FlightNetworkService.swift in Sources */,
 				6680F8602B34382100E00862 /* FlightProgressView.swift in Sources */,
 				6636717C2B2F826600FC6234 /* ContentView.swift in Sources */,
