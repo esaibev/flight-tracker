@@ -94,7 +94,6 @@ struct ContentView: View {
                     if let flight = ftvm.selectedFlight {
                         BriefFlightView(flight: flight)
                             .gesture(DragGesture().onChanged { value in
-//                                print("Value: \(value.translation.height)")
                                 if value.translation.height < -80 {
                                     ftvm.isShowingDetailedSheet = true
                                     ftvm.isShowingBriefSheet = false

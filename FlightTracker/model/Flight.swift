@@ -111,7 +111,7 @@ struct Flight: Codable, Equatable {
             depTerminal: "3",
             depGate: "E37",
             arrIata: "PHL",
-            arrCity: "Arnavutköy, Istanbul",
+            arrCity: "Philadelphia",
             arrName: "Philadelphia International Airport",
             arrCountry: "US",
             status: "en-route",

@@ -17,16 +17,9 @@ class FlightTrackerVM {
     var errorMessage: String?
     var camera: MapCameraPosition = .region(.startingRegion)
     var bbox: (swLat: Double, swLon: Double, neLat: Double, neLon: Double) = (0, 0, 0, 0)
-    var updateNr = 1
     var annotationSelected = false
     var isShowingBriefSheet = false
     var isShowingDetailedSheet = false
-
-    init() {
-        Task {
-            await getFlight("")
-        }
-    }
 
     @ObservationIgnored private var zoomLevel = 5
     @ObservationIgnored private var updateTimer: Timer?
@@ -47,7 +40,6 @@ class FlightTrackerVM {
         let neLon = center.longitude + (span.longitudeDelta / 2.0)
 
         bbox = (swLat, swLon, neLat, neLon)
-//        print(bbox)
     }
 
     func getFlights() async {
@@ -77,7 +69,6 @@ class FlightTrackerVM {
             DispatchQueue.main.async {
                 self.selectedFlight = flight
             }
-//            print("Flight info: \(flight)")
         } catch {
             DispatchQueue.main.async {
                 self.errorMessage = error.localizedDescription
@@ -97,7 +88,6 @@ class FlightTrackerVM {
                 self.annotationSelected = true
                 self.updateCameraPosition(for: flight)
             }
-//            print(flight)
         } catch {
             DispatchQueue.main.async {
                 self.selectedFlight = nil
@@ -125,11 +115,9 @@ class FlightTrackerVM {
         Task {
             await self.getFlights()
         }
-        updateTimer = Timer.scheduledTimer(withTimeInterval: 20.0, repeats: true) { [weak self] _ in
+        updateTimer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: true) { [weak self] _ in
             guard let self = self else { return }
             Task {
-//                print("Update \(self.updateNr)")
-                self.updateNr += 1
                 if !self.isShowingDetailedSheet {
                     await self.getFlights()
                 }

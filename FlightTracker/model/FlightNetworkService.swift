@@ -10,13 +10,13 @@ import SwiftUI
 
 struct FlightNetworkService {
     static func getFlights(_ bbox: (swLat: Double, swLon: Double, neLat: Double, neLon: Double), _ zoomLevel: Int) async throws -> [Flight] {
+        return try await getFlightsFromURL(bbox, zoomLevel)
 //        return try getFlightsFromJSON()
-//        return try await getFlightsFromURL(bbox, zoomLevel)
     }
 
     static func getFlight(_ flightIata: String) async throws -> Flight {
-        return try getFlightFromJSON()
-//        return try await getFlightFromURL(flightIata)
+        return try await getFlightFromURL(flightIata)
+//        return try getFlightFromJSON()
     }
 
     private static func getFlightsFromURL(_ bbox: (swLat: Double, swLon: Double, neLat: Double, neLon: Double), _ zoomLevel: Int) async throws -> [Flight] {
@@ -25,11 +25,6 @@ struct FlightNetworkService {
             throw URLError(.badURL)
         }
         let (data, _) = try await URLSession.shared.data(from: url)
-
-        // Debugging: Print raw JSON data
-//        if let jsonString = String(data: data, encoding: .utf8) {
-//            print("JSON String: \(jsonString)\n")
-//        }
 
         let decoder = JSONDecoder()
         let response = try decoder.decode(FlightsResponse.self, from: data)
@@ -42,11 +37,6 @@ struct FlightNetworkService {
             throw URLError(.badURL)
         }
         let (data, _) = try await URLSession.shared.data(from: url)
-
-        // Debugging: Print raw JSON data
-//        if let jsonString = String(data: data, encoding: .utf8) {
-//            print("JSON String: \(jsonString)\n")
-//        }
 
         let decoder = JSONDecoder()
         let response = try decoder.decode(FlightResponse.self, from: data)
@@ -96,11 +86,6 @@ struct FlightNetworkService {
             throw NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Unable to find the JSON file"])
         }
         let data = try Data(contentsOf: URL(fileURLWithPath: path))
-
-        // Print raw JSON data
-//        if let jsonString = String(data: data, encoding: .utf8) {
-//            print("JSON String: \(jsonString)")
-//        }
 
         let decoder = JSONDecoder()
         let response = try decoder.decode(FlightResponse.self, from: data)

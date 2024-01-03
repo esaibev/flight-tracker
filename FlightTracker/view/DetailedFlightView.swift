@@ -31,11 +31,8 @@ struct DetailedFlightView: View {
     var flight: Flight?
     @Binding var showDetailedView: Bool
     @State private var depCountryFlag: Image? = nil
-    @State private var isDepCountryFlagLoading = true
     @State private var arrCountryFlag: Image? = nil
-    @State private var isArrCountryFlagLoading = true
     @State private var regCountryFlag: Image? = nil
-    @State private var isRegCountryFlagLoading = true
 
     var body: some View {
         VStack(spacing: 0) {
@@ -290,7 +287,7 @@ struct DetailedFlightView: View {
                                     .font(.system(size: 13))
                                     .foregroundStyle(.darkGrayText)
                                 
-                                FlagImageView(image: depCountryFlag, isLoading: isDepCountryFlagLoading)
+                                FlagImageView(image: depCountryFlag)
                             }
                         }
                     }
@@ -336,7 +333,7 @@ struct DetailedFlightView: View {
                                     .font(.system(size: 13))
                                     .foregroundStyle(.darkGrayText)
                                 
-                                FlagImageView(image: arrCountryFlag, isLoading: isArrCountryFlagLoading)
+                                FlagImageView(image: arrCountryFlag)
                             }
                         }
                     }
@@ -548,7 +545,7 @@ struct DetailedFlightView: View {
                             Text("REG.ORIGIN")
                                 .boxTitleStyle()
                             
-                            FlagImageView(image: regCountryFlag, isLoading: isRegCountryFlagLoading)
+                            FlagImageView(image: regCountryFlag)
                         }
                         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
                         .padding(.vertical, 8)
@@ -622,40 +619,27 @@ struct DetailedFlightView: View {
         if let depCountry = flight?.depCountry {
             ftvm.getFlagImage(for: depCountry) { image in
                 self.depCountryFlag = image
-                self.isDepCountryFlagLoading = false
             }
-        } else {
-            isDepCountryFlagLoading = false
         }
         
         if let arrCountry = flight?.arrCountry {
             ftvm.getFlagImage(for: arrCountry) { image in
                 self.arrCountryFlag = image
-                self.isArrCountryFlagLoading = false
             }
-        } else {
-            isArrCountryFlagLoading = false
         }
         
         if let regCountry = flight?.regCountry {
             ftvm.getFlagImage(for: regCountry) { image in
                 self.regCountryFlag = image
-                self.isRegCountryFlagLoading = false
             }
-        } else {
-            isRegCountryFlagLoading = false
         }
     }
     
     private struct FlagImageView: View {
         var image: Image?
-        var isLoading: Bool
 
         var body: some View {
-            if isLoading {
-                ProgressView()
-                    .frame(width: 20, height: 20)
-            } else if let image = image {
+            if let image = image {
                 image.resizable().frame(width: 20, height: 20)
             } else {
                 Text("N/A").font(.system(size: 16))
