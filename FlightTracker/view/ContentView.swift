@@ -47,6 +47,9 @@ struct ContentView: View {
                 .onMapCameraChange { context in
                     let region = context.region
                     ftvm.calculateBbox(from: region)
+                    Task {
+                        await ftvm.getFlights()
+                    }
                 }
                 .onTapGesture {
                     if !activeAnnotationTimer {
@@ -67,7 +70,7 @@ struct ContentView: View {
                         print("Background scene")
                         ftvm.stopUpdateTimer()
                     default:
-                        print("\(newPhase) scene")
+                        print("\(newPhase)".capitalizeFirstLetter(), "scene")
                     }
                 }
                 .overlay(alignment: .bottom, content: {

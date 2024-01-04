@@ -16,11 +16,12 @@ class FlightTrackerVM {
     var flights: [Flight] = []
     var errorMessage: String?
     var camera: MapCameraPosition = .region(.startingRegion)
-    var bbox: (swLat: Double, swLon: Double, neLat: Double, neLon: Double) = (0, 0, 0, 0)
     var annotationSelected = false
     var isShowingBriefSheet = false
     var isShowingDetailedSheet = false
 
+    @ObservationIgnored var bbox: (swLat: Double, swLon: Double, neLat: Double, neLon: Double) = (0, 0, 0, 0)
+    @ObservationIgnored private var latestShownFlight: Flight?
     @ObservationIgnored private var zoomLevel = 5
     @ObservationIgnored private var updateTimer: Timer?
 
@@ -44,15 +45,24 @@ class FlightTrackerVM {
 
     func getFlights() async {
         do {
-            let flights = try await FlightNetworkService.getFlights(bbox, zoomLevel)
+            let fetchedFlights = try await FlightNetworkService.getFlights(bbox, zoomLevel)
 
             DispatchQueue.main.async {
-                if let selected = self.selectedFlight, !flights.contains(where: { $0.icao24 == selected.icao24 }) {
-                    // Append selectedFlight to flights if it wasn't included in the fetch
-                    self.flights = flights + [selected]
-                } else {
-                    self.flights = flights
+                var updatedFlights = fetchedFlights
+
+                // Append selectedFlight to flights if it wasn't included in the fetch
+                if let selected = self.selectedFlight, !updatedFlights.contains(where: { $0.icao24 == selected.icao24 }) {
+                    updatedFlights.append(selected)
                 }
+                // Append latestShownFlight to flights to not make it disappear on map
+                else if self.selectedFlight == nil,
+                        let latestShown = self.latestShownFlight,
+                        !updatedFlights.contains(where: { $0.icao24 == latestShown.icao24 })
+                {
+                    updatedFlights.append(latestShown)
+                }
+
+                self.flights = updatedFlights
             }
         } catch {
             DispatchQueue.main.async {
@@ -68,6 +78,7 @@ class FlightTrackerVM {
             let flight = try await FlightNetworkService.getFlight(flightIata)
             DispatchQueue.main.async {
                 self.selectedFlight = flight
+                self.latestShownFlight = flight
             }
         } catch {
             DispatchQueue.main.async {
@@ -83,6 +94,7 @@ class FlightTrackerVM {
             let flight = try await FlightNetworkService.getFlight(flightIata)
             DispatchQueue.main.async {
                 self.flights.append(flight)
+                self.latestShownFlight = flight
                 self.isShowingBriefSheet = true
                 self.selectedFlight = flight
                 self.annotationSelected = true
@@ -112,9 +124,6 @@ class FlightTrackerVM {
 
     func startUpdateTimer() {
         stopUpdateTimer()
-        Task {
-            await self.getFlights()
-        }
         updateTimer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: true) { [weak self] _ in
             guard let self = self else { return }
             Task {
