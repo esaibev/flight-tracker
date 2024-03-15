@@ -9,6 +9,8 @@ import Foundation
 import SwiftUI
 
 struct FlightNetworkService {
+    private static let apiKey = Config.apiKey
+    
     static func getFlights(_ bbox: (swLat: Double, swLon: Double, neLat: Double, neLon: Double), _ zoomLevel: Int) async throws -> [Flight] {
         return try await getFlightsFromURL(bbox, zoomLevel)
 //        return try getFlightsFromJSON()
@@ -20,7 +22,7 @@ struct FlightNetworkService {
     }
 
     private static func getFlightsFromURL(_ bbox: (swLat: Double, swLon: Double, neLat: Double, neLon: Double), _ zoomLevel: Int) async throws -> [Flight] {
-        let urlString = "https://airlabs.co/api/v9/flights?api_key=8ba6bdb2-a617-455a-90aa-28510435a30d&bbox=\(bbox.swLat),\(bbox.swLon),\(bbox.neLat),\(bbox.neLon)&zoom=\(zoomLevel)"
+        let urlString = "https://airlabs.co/api/v9/flights?api_key=\(apiKey)&bbox=\(bbox.swLat),\(bbox.swLon),\(bbox.neLat),\(bbox.neLon)&zoom=\(zoomLevel)"
         guard let url = URL(string: urlString) else {
             throw URLError(.badURL)
         }
@@ -32,7 +34,7 @@ struct FlightNetworkService {
     }
 
     private static func getFlightFromURL(_ flightIata: String) async throws -> Flight {
-        let urlString = "https://airlabs.co/api/v9/flight?api_key=8ba6bdb2-a617-455a-90aa-28510435a30d&flight_iata=\(flightIata)"
+        let urlString = "https://airlabs.co/api/v9/flight?api_key=\(apiKey)&flight_iata=\(flightIata)"
         guard let url = URL(string: urlString) else {
             throw URLError(.badURL)
         }
@@ -67,6 +69,10 @@ struct FlightNetworkService {
                 }
             }
         }.resume()
+    }
+    
+    private static func getAPIKey() -> String {
+        return ProcessInfo.processInfo.environment["API_KEY"] ?? "DefaultAPIKey"
     }
 
     // MARK: Functions that uses test data from JSON
