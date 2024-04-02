@@ -16,6 +16,7 @@
 		663788242B44283D002C9E51 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 663788232B44283D002C9E51 /* ImageCache.swift */; };
 		66389C132B335EEA00B56CB1 /* BriefFlightView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66389C122B335EEA00B56CB1 /* BriefFlightView.swift */; };
 		66391EA12B3240CF00EDABB0 /* InputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66391EA02B3240CF00EDABB0 /* InputView.swift */; };
+		665D58572BBCA50800132E69 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 665D58562BBCA50800132E69 /* README.md */; };
 		6680F8602B34382100E00862 /* FlightProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6680F85F2B34382100E00862 /* FlightProgressView.swift */; };
 		66A227A12B30646600C46E65 /* Flight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66A227A02B30646600C46E65 /* Flight.swift */; };
 		66A227A32B30658D00C46E65 /* FlightNetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66A227A22B30658D00C46E65 /* FlightNetworkService.swift */; };
@@ -35,6 +36,7 @@
 		663788232B44283D002C9E51 /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
 		66389C122B335EEA00B56CB1 /* BriefFlightView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BriefFlightView.swift; sourceTree = "<group>"; };
 		66391EA02B3240CF00EDABB0 /* InputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputView.swift; sourceTree = "<group>"; };
+		665D58562BBCA50800132E69 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		6680F85F2B34382100E00862 /* FlightProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlightProgressView.swift; sourceTree = "<group>"; };
 		66A227A02B30646600C46E65 /* Flight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Flight.swift; sourceTree = "<group>"; };
 		66A227A22B30658D00C46E65 /* FlightNetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlightNetworkService.swift; sourceTree = "<group>"; };
@@ -57,6 +59,7 @@
 		6636716D2B2F826600FC6234 = {
 			isa = PBXGroup;
 			children = (
+				665D58562BBCA50800132E69 /* README.md */,
 				663671782B2F826600FC6234 /* FlightTracker */,
 				663671772B2F826600FC6234 /* Products */,
 			);
@@ -184,6 +187,7 @@
 			files = (
 				66E0A0942B36E7D6009D3022 /* flights-bbox-filter.json in Resources */,
 				66AD01E42B30940B0023D2C8 /* flight-iata-filter.json in Resources */,
+				665D58572BBCA50800132E69 /* README.md in Resources */,
 				663671812B2F826900FC6234 /* Preview Assets.xcassets in Resources */,
 				6636717E2B2F826900FC6234 /* Assets.xcassets in Resources */,
 			);
